@@ -1,0 +1,49 @@
+name: Deploy Project
+
+on:
+  push:
+    branches:
+      - main
+    path:
+      - 'frontend/**'
+      - 'nginx/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:  
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Build frontend docker image
+        run: |
+          docker build -t frontend:latest ./frontend/.
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag frontend:latest strawhatshanks/frontend:latest
+          docker push strawhatshanks/frontend:latest
+      
+      - name: Push nginx docker image
+        run: |
+          docker build -t nginx:latest ./nginx/.
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag nginx:latest strawhatshanks/nginx:latest
+          docker push strawhatshanks/nginx:latest
+      
+      - name: Build auth backend docker image
+        run: |
+          docker build -t authBackend:latest ./user-auth/.
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag authBackend:latest strawhatshanks/authBackend:latest
+          docker push strawhatshanks/authBackend:latest
+      
+
+      - name: SSH into EC2 and Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << 'EOF'
+            docker pull strawhatshanks/frontend:latest
+            docker pull strawhatshanks/nginx:latest
+            docker pull strawhatshanks/authBackend:latest
+            docker-compose down
+            docker-compose up -d --build
+          EOF

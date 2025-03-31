@@ -1,0 +1,61 @@
+services:
+  auth_backend_1:
+    build:  ./user-auth/.
+    container_name: backend
+    environment:
+      - AUTH_SERVER_PORT=${AUTH_BACKEND_PORT_1}
+      - FRONTEND_ENDPOINT=${MAIN_URL}
+    ports:
+      - "${AUTH_BACKEND_PORT_1}:${NGINX_PORT}"
+    networks:
+      - cooking-web
+    restart: always
+    env_file:
+      - ./user-auth/.env
+    
+  auth_backend_2:
+    build:  ./user-auth/.
+    container_name: backend-2
+    environment:
+      - AUTH_SERVER_PORT=${AUTH_BACKEND_PORT_2}
+      - FRONTEND_ENDPOINT=${MAIN_URL}
+    ports:
+      - "${AUTH_BACKEND_PORT_2}:${NGINX_PORT}"
+    networks:
+      - cooking-web
+    restart: always
+    env_file:
+      - ./user-auth/.env
+  
+  frontend:
+    build:  
+      context : ./frontend/.
+    container_name: frontend
+    command: ["echo","Front Built Successfully"]
+    volumes:
+      - frontend_build:/app/out
+    networks:
+      - cooking-web
+
+  nginx:
+    build: 
+      context : ./nginx/.
+    container_name: nginx
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    volumes:
+      - frontend_build:/usr/share/nginx/html
+    networks:
+      - cooking-web
+    restart: always
+  
+volumes:
+  frontend_build: 
+    name: frontend_build
+networks:
+  cooking-web:
+    name: cooking-web
+    driver: bridge
+  
+
+    

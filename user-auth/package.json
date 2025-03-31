@@ -1,0 +1,29 @@
+{
+  "name": "user-auth",
+  "main": "server.js",
+  "version": "1.0.0",
+  "description": "User Authentication",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run build",
+    "docker-build:dev": "docker build -t user-auth:0.0.1 .",
+    "docker-run:dev": "docker run --name user-auth -p 3001:3001 -v my-node-modules:/app/node_modules user-auth:0.0.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.11.0",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9"
+  },
+  "author": "sarang",
+  "license": "ISC"
+}
