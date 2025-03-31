@@ -1,0 +1,113 @@
+.sidebarContainer{
+    position: relative;
+    height: 100vh;
+    width: 100px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Hamburger */
+.hamburger{
+    display: block;
+    position: relative;
+    width:100px;
+    padding: 20px 0 16px 0;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.line{
+    width:35px;
+    height:3px;
+    background-color: black;
+    margin : 4px 0 4px 0;
+    border-radius: 10px;
+}
+
+/* animation */
+.hamburger:hover{
+    cursor: pointer;
+}
+
+.container-exp{
+    height: 100vh;
+}
+
+.container-exp .hamburger{
+    display: block;
+    position: relative;
+    padding: 20px 0 27px 1px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-exp .line:nth-child(1){
+    transition: 1s;
+    transform: rotate(45deg) translate(5px ,5px);
+}
+
+.container-exp .line:nth-child(2){
+    transition: 1s;
+    display: none;
+}
+
+.container-exp .line:nth-child(3){
+    transition: 1s;
+    transform: rotate(135deg) translate(-3px ,2.5px);
+}
+
+/* Sidebar */
+.sidebar{
+    position: relative;
+    display:flex;
+    flex-direction: column;
+    width: 100px;
+    height: 100%;
+    padding: 20px 0 0 0;
+    background-color: rgb(128, 75, 177);
+    /* border-top-right-radius: 20px; */
+    /* transition: width 0.7s linear; */
+    overflow: hidden;
+}
+.sidebar-item{
+    display:flex;
+    margin : 0 0 20px 0;
+    width : 100%;
+    /* transition: opacity 0.3s ease; */
+}
+
+.sidebar img:hover{
+    cursor: pointer;
+    transform: scale(1.5);
+    transition: 0.2s;
+}
+
+.sidebar-item-icon{
+    width:100px;
+    display:flex;
+    justify-content: center;
+}
+
+.sidebar-item-icon img{
+    width : 25px;
+}
+
+.sidebar-item-text{
+    display : none;
+}
+
+.container-exp .sidebar{
+    width : 300px;
+    /* transition: width 0.3s ease-in-out; */
+}
+
+.container-exp .sidebar-item{
+    display:flex;
+}
+.sidebar.expanded .sidebar-item-text{
+    display: block;
+}

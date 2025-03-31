@@ -12,6 +12,7 @@ services:
     restart: always
     env_file:
       - ./user-auth/.env
+      - ./app/.env
     
   auth_backend_2:
     build:  ./user-auth/.
@@ -26,6 +27,7 @@ services:
     restart: always
     env_file:
       - ./user-auth/.env
+      - ./app/.env
   
   frontend:
     build:  
@@ -48,6 +50,8 @@ services:
     networks:
       - cooking-web
     restart: always
+    env_file:
+      - ./app/.env
   
 volumes:
   frontend_build: 

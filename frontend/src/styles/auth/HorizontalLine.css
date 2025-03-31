@@ -1,0 +1,18 @@
+.lineContainer{
+    padding: 5% 0 0 0;
+}
+.authLine{
+    flex:1;
+    height:1px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+}
+.auth.content{
+    position: absolute;
+    background-color: white;
+    padding: 0 2%;
+    color:gray;
+}
+

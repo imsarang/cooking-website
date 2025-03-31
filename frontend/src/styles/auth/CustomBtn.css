@@ -1,0 +1,31 @@
+.btnContainer{
+    width:100%;
+    /* background-color: red; */
+    padding: 5% 0 0 2%;
+}
+.googleBtn{
+    width:50%;
+    border:1px solid rgb(245, 120, 11);
+    display:flex;   
+    justify-content: center;
+    padding: 3%;
+    border-radius: 15px;
+    color:orange;
+}
+
+.icon{
+    width:20px;
+    height:20px;
+    margin:0 3%;
+}
+
+.text{
+    font-size:15px;
+    padding:0 7%;
+}
+
+.googleBtn:hover{
+    background-color: rgb(238, 199, 124);
+    transition: 0.5s;
+    color:white
+}

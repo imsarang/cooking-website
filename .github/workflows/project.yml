@@ -9,7 +9,7 @@ on:
       - 'nginx/**'
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:  
@@ -32,18 +32,40 @@ jobs:
       
       - name: Build auth backend docker image
         run: |
-          docker build -t authBackend:latest ./user-auth/.
+          docker build -t auth-backend:latest ./user-auth/.
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag authBackend:latest strawhatshanks/authBackend:latest
-          docker push strawhatshanks/authBackend:latest
+          docker tag auth-backend:latest strawhatshanks/auth-backend:latest
+          docker push strawhatshanks/auth-backend:latest
       
-
+  deploy:
+    
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: SSH into EC2 and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_IP }} << 'EOF'
-            docker pull strawhatshanks/frontend:latest
-            docker pull strawhatshanks/nginx:latest
-            docker pull strawhatshanks/authBackend:latest
-            docker-compose down
-            docker-compose up -d --build
+          echo "${{ secrets.EC2_KEY }}" > ec2-key.pem
+          chmod 400 ec2-key.pem
+          ssh -o StrictHostKeyChecking=accept-new -i ec2-key.pem ubuntu@${{ secrets.EC2_IP }} << 'EOF'
+
+            # Create the .env file and write secrets to it
+            mkdir -p /home/ubuntu/user-auth
+            cd /home/ubuntu/user-auth
+            touch .env
+
+            echo "NGINX_PORT=${{ secrets.NGINX_PORT }}" >> .env
+            echo "AUTH_BACKEND_PORT_2=${{ secrets.AUTH_BACKEND_PORT_2 }}" >> .env
+            echo "AUTH_BACKEND_PORT_1=${{ secrets.AUTH_BACKEND_PORT_1 }}" >> .env
+            echo "MAIN_URL=${{ secrets.MAIN_URL }}" >> .env
+
+            sudo docker pull strawhatshanks/frontend:latest
+            sudo docker pull strawhatshanks/nginx:latest
+            sudo docker pull strawhatshanks/auth-backend:latest
+
+            # Navigate to the project directory
+            # cd /home/ubuntu/user-auth 
+            # touch /home/ubuntu/user-auth/.env
+            
+            sudo docker-compose --env-file .env down
+            sudo docker-compose --env-file .env up -d --build
           EOF
