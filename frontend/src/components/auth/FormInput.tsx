@@ -20,7 +20,7 @@ const FormInput: React.FC<FormInputProps> = ({ label, type, name, value, setData
 
     return (
         <div className='inputMain'>
-            <div className='inputBox'>
+            <div className={`inputBox `}>
                 <input
                     className='input'
                     type={type}

@@ -1,0 +1,120 @@
+.carousel-container {
+  position:relative;
+  width:100%;
+  height:70%;
+  display:flex;
+  flex-direction: column;
+}
+
+.carousel{
+  width:100%;
+  height:800px;
+  display:flex;
+  position: relative;
+  overflow: hidden;
+  background-color: antiquewhite;
+  border-bottom-left-radius: 90%;
+  /* border-bottom-right-radius: 10% */
+}
+
+.carousel-wheel-wrapper{
+  position: absolute;
+  top: 75%;
+  left: 60%;
+  width: 400px;
+  height: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.carousel-wheel{
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transition: transform 0.5s ease-in-out;
+  /* transform-origin:center center ;   */
+}
+.carousel-item-img{
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+.carousel-item-img:hover{
+  cursor: pointer;
+  transform: scale(1.2) translate(-50%, -50%);
+  transition: all 0.3s ease-in-out;
+  opacity: 0.5;
+}
+
+.carousel-controls{
+  position: absolute;
+  width:100%;
+  height:50%;
+  top:100%;
+  display:flex;
+  padding: 5% 0 0 0;
+}
+.prev-wrapper{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content: center;
+  padding: 0 0 0 10%;
+}
+
+.next-wrapper{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:end;
+  padding:0% 10% 0 0%;
+}
+
+.prev, .next{
+  width:50px;
+  height:50px;
+  border-radius: 100%;
+  box-shadow: 0 0 5px rgb(247, 203, 120);
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  color: rgb(247, 203, 120);
+}
+
+.prev:hover, .next:hover{
+  background-color: rgb(247, 203, 120);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.3);
+}
+
+.carousel-current-item{
+  position:absolute; 
+  top: 90%;
+  left:60%;
+}
+
+.carousel-current-item-image{
+  width:200px;
+  height:200px;
+  border-radius: 100%;
+  /* border: 1px solid black; */
+  box-shadow: 0 0 50px white;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}

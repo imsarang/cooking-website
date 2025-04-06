@@ -41,3 +41,8 @@
     padding:2px;
     background-color: #fbfbfb;
 }
+
+.password-confirm{
+    width:100%;
+    display:flex;
+}

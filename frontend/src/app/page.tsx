@@ -1,27 +1,40 @@
 "use client";
 
-import ProductCard from '@/components/recipes/ProductCard'
-import Sidebar from "@/components/recipes/Sidebar";
+import Sidebar from "@/components/common/Sidebar";
 import "@/styles/home.css";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState,  } from 'react';
+import { useEffect, useState, } from 'react';
 import { fetchFromLocalStorage, removeFromLocalStorage, storeInLocalStorage } from '@/utils/LocalStorage';
 import { APIFetchRequest, APIFetchRequestWithToken, fetchServerEndpoint } from '../../middleware/auth';
+import Carousel from '@/components/recipes/Carousel';
+import Header from "@/components/common/Header";
 
+
+interface MenuInterface {
+  image: string,
+  text: string,
+}
 // const SERVER_ENDPOINT = `${process.env.AUTH_SERVER}:${process.env.AUTH_SERVER_PORT}`
 
 export default function Home() {
 
   const router = useRouter()
   const [token, setToken] = useState("")
+  const [currentItem, setCurrentItem] = useState({
+    image: "/images/recipes/wadapav.jpg",
+    text: "1",
+  } as MenuInterface)
+
+  const [dropdown, setDropdown] = useState(false)
 
   useEffect(() => {
     setToken(fetchFromLocalStorage('AccessToken') as string)
   }, [token])
 
   const logout = async () => {
-    console.log("LOGOUT");
-    
+
+    setDropdown(!dropdown)
+
     const result = await APIFetchRequest(`${fetchServerEndpoint()}/api/auth/logout`)
     // const result = await APIFetchRequest(`http://backend:3001/api/auth/logout`)
 
@@ -32,45 +45,38 @@ export default function Home() {
     removeFromLocalStorage('AccessToken')
     setToken("")
     console.log("LOGOUT SUCCESS");
-    
+
     router.push('/')
   }
 
-  const products = [
-    {
-      image: '/images/recipes/wadapav.jpg',
-      title: 'Wada Pav',
-      description: 'Mumbai special Wada Pav',
-      rating: 4.5,
-      isFavourite: false
-    },
-    {
-      image: '/images/recipes/wadapav.jpg',
-      title: 'Wada Pav',
-      description: 'Mumbai special Wada Pav',
-      rating: 4.5,
-      isFavourite: false
-    }
-  ]
-
   return (
     <div className="main">
-      <Sidebar token={token} logout = {logout}/>
+      <Header token = {token} logout = {logout}/>
+      <Sidebar token = {token}/>
       <div className="home">
-        <div className="header">
-          Cooking Main
-        </div>
-        <div className="home-content">
-          {
-            products.map((product, index) => {
-              return (
-                <div className="product-card" key = {index}>
-                  <ProductCard key={index} image={product.image} title={product.title} description={product.description} rating={product.rating} isFavourite={product.isFavourite} />
-                </div>
-              )
-            })
-          }
-
+        <div className='main-content'>
+          <div className="content-wrapper">
+            <div className='content'>
+              <div className='rating'>
+                4/5
+              </div>
+              <div className='cuisine'>
+                Indian Veg
+              </div>
+              <div className='description'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                <span style={{ fontSize: '30px' }}>{currentItem?.text}</span>
+              </div>
+              <div className='add-to-fav'>
+                <button className='add-to-fav-btn'>
+                  Add to Favourites
+                </button>
+              </div>
+            </div>
+          </div>
+          <Carousel
+            setCurrentItem={setCurrentItem}
+            currentItem={currentItem} />
         </div>
       </div>
     </div>
