@@ -1,7 +1,6 @@
 import { APIResponseFailure, APIResponseError, APIResponseSuccess } from "../utils/APIresponse.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/Token.js";
 import bcrypt from "bcryptjs"
-import cookieParser from "cookie-parser";
 import User from "../models/UserSchema.js";
 
 export const registerUser = async (
@@ -88,7 +87,11 @@ export const loginUser = async (
         const passwordMatch = await bcrypt.compare(password, existingUser.password)
         
         if (!passwordMatch) {
-            APIResponseFailure(res, "Passwords Donot Match", 400);
+            return res.status(400).json({
+                success:false,
+                message:"Passwords Donot Match"
+            })
+            // APIResponseFailure(res, "Passwords Donot Match", 400);
         }
 
         const accessToken = generateAccessToken(existingUser)

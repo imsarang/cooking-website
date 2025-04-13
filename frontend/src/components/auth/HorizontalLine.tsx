@@ -10,7 +10,7 @@ const HorizontalLine:React.FC<HorizontalLineProps> = ({text}) => {
   return (
     <div className={`lineContainer`}>
         <div className={`authLine`}>
-        <div className={`auth content`}>{text}</div>
+        <div className={`auth-content`}>{text}</div>
         </div>
     </div>
   )

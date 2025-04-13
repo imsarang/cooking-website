@@ -2,25 +2,52 @@ import React from 'react'
 import { FaUser, FaUserCircle } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, } from 'react';
+import { fetchFromLocalStorage, removeFromLocalStorage, storeInLocalStorage } from '@/utils/LocalStorage';
+import { APIFetchRequest, fetchServerEndpointAuth } from '@/middleware/common';
 import '@/styles/common/header.css'
 
 interface HeaderInterface {
     token: string
-    logout: ()=>Promise<void>
+    setToken: React.Dispatch<React.SetStateAction<string>>
 }
 
-const Header = ({token, logout}: HeaderInterface) => {
+const Header = ({token, setToken}: HeaderInterface) => {
     const router = useRouter()
     const [dropdown, setDropdown] = useState(false)
     
+    useEffect(()=>{
+      console.log(token);
+      
+      if(token!=null) setDropdown(true);
+      else setDropdown(false)   
+    },[token])
+
     const handleDropdown = ()=>{
         setDropdown(!dropdown)
       }
     
-      const handleLogin = ()=>{
-        router.push('/auth')
-      }
+    const handleLogin = ()=>{
+      router.push('/auth')
+    }
 
+    const logout = async () => {
+
+      setDropdown(!dropdown)
+  
+      const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/logout`)
+      // const result = await APIFetchRequest(`http://backend:3001/api/auth/logout`)
+  
+      if (!result.success) {
+        alert(`Error while logging out : ${result.error || result.message}`)
+      }
+  
+      removeFromLocalStorage('AccessToken')
+      setToken("")
+      console.log("LOGOUT SUCCESS");
+  
+      router.push('/')
+    }
+    
   return (
     <div className='main-menu'>
         <div className='about-section'>

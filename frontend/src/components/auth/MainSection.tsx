@@ -6,8 +6,9 @@ import '@/styles/auth/home.css'
 import CustomForm from './CustomForm'
 import ImageComponent from './ImageComponent'
 import CustomBtn from './CustomBtn'
-import { APIFetchRequest, emailValidation, fetchServerEndpoint, passwordMatch, passwordValidation } from '../../../middleware/auth'
-import { storeInLocalStorage } from '../../utils/LocalStorage'
+import { emailValidation, passwordMatch, passwordValidation } from '@/middleware/auth'
+import { storeInLocalStorage } from '@/utils/LocalStorage'
+import {APIFetchRequest, fetchServerEndpointAuth} from '@/middleware/common'
 
 const AuthImage = "/images/auth/AuthImage.jpg"
 const LoginText = "Login"
@@ -79,7 +80,7 @@ const MainSection = () => {
       return
     }
 
-    const result = await APIFetchRequest(`${fetchServerEndpoint()}/api/auth/login`, 'POST', loginData)
+    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/login`, 'POST', loginData)
 
     if (result.success) 
     {
@@ -112,7 +113,7 @@ const MainSection = () => {
     }
 
     // Send to backend
-    const result = await APIFetchRequest(`${fetchServerEndpoint()}/api/auth/user`, 'POST', registerData)
+    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/user`, 'POST', registerData)
 
     if (result?.success) 
     {
@@ -126,7 +127,7 @@ const MainSection = () => {
   }
 
   return (
-    <div className='auth main'>
+    <div className='auth-main'>
       <div className={toggle ? 'auth container active' : 'auth container'}>
         <div className='formContainer login'>
           <div className='customFormContainer'>

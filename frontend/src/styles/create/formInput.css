@@ -1,0 +1,49 @@
+.create-inputMain{
+    padding:2% 0;
+    width:100%;
+    flex-direction: column;
+}
+
+.create-inputBox{
+    position: relative;
+    width:100%;
+}
+
+.create-label{
+   position:absolute;
+   left:0;
+   padding:2% 5%;
+   pointer-events: none;
+   font-size:13px;
+   transition: 0.4s ease;
+}
+
+.create-input{
+    width:100%;
+    outline:none;
+    padding: 2%;
+    border-radius: 10px;
+    border:1px solid black;
+    font-size:1em;
+}
+
+.create-input:focus,
+.create-input:valid{
+    color: black; 
+    border:2px solid rgb(157, 153, 153);
+}
+
+.create-input:focus + .create-label,
+.create-input:valid + .create-label{
+    color:black;
+    transform: translateX(10px) translateY(-10px);
+    font-size: 0.75em;
+    padding:2px;
+    background-color:rgb(241, 236, 236);
+    /* background-color: red; */
+}
+
+.password-confirm{
+    width:100%;
+    display:flex;
+}

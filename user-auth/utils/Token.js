@@ -28,7 +28,8 @@ export const refreshAccessToken = async (
     res
 ) => {
     const { refreshToken } = req.cookies
-
+    console.log(refreshToken);
+    
     if (!refreshToken) {
         APIResponseError(res, "Refresh Token not found", 500)
     }

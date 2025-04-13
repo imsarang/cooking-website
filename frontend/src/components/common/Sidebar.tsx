@@ -30,6 +30,8 @@ const Sidebar = ({token}: SidebarProps) => {
   },[token])
 
   const handleTokenChanges = () => {
+    console.log(token);
+    
     if(token)
     setSidebarContent(sidebasrContentLoggedIn)
     else
@@ -41,9 +43,14 @@ const Sidebar = ({token}: SidebarProps) => {
     
     switch(item.key)
     {
+      case 0:
+        router.push('/')
+        break;
       case 2:
         router.push('/account')
         break;
+      case 3:
+        router.push('/create/recipe')
       default:
         break;
     }

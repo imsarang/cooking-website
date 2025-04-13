@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import '@/styles/auth/CustomForm.css'
-import FormInput from './FormInput';
+import FormInput from '@/components/common/FormInput';
 import HorizontalLine from './HorizontalLine';
 
 interface AuthProps {

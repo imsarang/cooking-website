@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - backend-recipe
     path:
       - 'frontend/**'
       - 'nginx/**'
@@ -36,7 +37,14 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker tag auth-backend:latest strawhatshanks/auth-backend:latest
           docker push strawhatshanks/auth-backend:latest
-      
+      - name: Build recipe backend docker image
+        run: |
+          docker build -t recipe-backend:latest ./user-recipe/.
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag recipe-backend:latest strawhatshanks/recipe-backend:latest
+          docker push strawhatshanks/recipe-backend:latest
+
+
   deploy:
     
     runs-on: ubuntu-latest
@@ -61,7 +69,8 @@ jobs:
             sudo docker pull strawhatshanks/frontend:latest
             sudo docker pull strawhatshanks/nginx:latest
             sudo docker pull strawhatshanks/auth-backend:latest
-
+            sudo docker pull strawhatshanks/recipe-backend:latest
+            
             # Navigate to the project directory
             # cd /home/ubuntu/user-auth 
             # touch /home/ubuntu/user-auth/.env

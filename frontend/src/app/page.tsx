@@ -1,14 +1,8 @@
 "use client";
-
-import Sidebar from "@/components/common/Sidebar";
 import "@/styles/home.css";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, } from 'react';
-import { fetchFromLocalStorage, removeFromLocalStorage, storeInLocalStorage } from '@/utils/LocalStorage';
-import { APIFetchRequest, APIFetchRequestWithToken, fetchServerEndpoint } from '../../middleware/auth';
+import { useState } from 'react';
 import Carousel from '@/components/recipes/Carousel';
-import Header from "@/components/common/Header";
-
 
 interface MenuInterface {
   image: string,
@@ -16,7 +10,7 @@ interface MenuInterface {
 }
 // const SERVER_ENDPOINT = `${process.env.AUTH_SERVER}:${process.env.AUTH_SERVER_PORT}`
 
-export default function Home() {
+const Home =() => {
 
   const router = useRouter()
   const [token, setToken] = useState("")
@@ -27,32 +21,11 @@ export default function Home() {
 
   const [dropdown, setDropdown] = useState(false)
 
-  useEffect(() => {
-    setToken(fetchFromLocalStorage('AccessToken') as string)
-  }, [token])
-
-  const logout = async () => {
-
-    setDropdown(!dropdown)
-
-    const result = await APIFetchRequest(`${fetchServerEndpoint()}/api/auth/logout`)
-    // const result = await APIFetchRequest(`http://backend:3001/api/auth/logout`)
-
-    if (!result.success) {
-      alert(`Error while logging out : ${result.error || result.message}`)
-    }
-
-    removeFromLocalStorage('AccessToken')
-    setToken("")
-    console.log("LOGOUT SUCCESS");
-
-    router.push('/')
-  }
 
   return (
     <div className="main">
-      <Header token = {token} logout = {logout}/>
-      <Sidebar token = {token}/>
+      {/* <Header token = {token} setToken={setToken}/>
+      <Sidebar token = {token}/> */}
       <div className="home">
         <div className='main-content'>
           <div className="content-wrapper">
@@ -82,3 +55,9 @@ export default function Home() {
     </div>
   );
 }
+
+// Home.getLayout = function getLayout(page: ReactElement) {
+//   return <Layout>{page}</Layout>;
+// };
+
+export default Home

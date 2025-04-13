@@ -17,6 +17,11 @@ export const sidebarContentLoggedOut = [
         image: <FaBots />,
         text: "Chatbot",
         key: 2
+    },
+    {
+        image: <FaPlus />,
+        text: "Add Recipe",
+        key: 3
     }
 ]
 

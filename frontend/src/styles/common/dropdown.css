@@ -1,0 +1,22 @@
+.dropdown{
+    position:relative;
+    width:100%;
+    padding:2%;
+}
+
+.dropdown-select{
+    width:100%;
+    appearance: none;
+    padding:5%;
+}
+
+.dropdown-item{
+    width: 100%;
+}
+
+.down-arrow{
+    position:absolute;
+    top:30%;
+    left: 80%;
+    font-size:20px
+}
