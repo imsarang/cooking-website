@@ -29,7 +29,7 @@ interface LayoutProps {
 export default function Layout({
   children,
 }: LayoutProps) {
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState(null as string | null);
 
   useEffect(() => {
     setToken(fetchFromLocalStorage('AccessToken') as string)

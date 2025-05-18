@@ -1,0 +1,13 @@
+.chat-header{
+    width:100%;
+    display:flex;
+    /* background-color: red; */
+    /* justify-content: space-around; */
+    align-items: center;
+    border: 2px solid orange;
+}
+
+.chat-search{
+    width:60%;
+    /* padding: 2%; */
+}

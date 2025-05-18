@@ -1,75 +1,98 @@
 import { APIResponseError, APIResponseSuccess } from '../utils/APIResponse.js';
 import Recipe from '../models/RecipeSchema.js'
-
-import AWS from 'aws-sdk'
-
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-});
-
-export const createRecipe = async (
-    req,
-    res
-) => {
-
-    console.log(req.body);
-
-    // image
-    const imageFile = req.files['imageFile'][0]
-    const imageFileKey = `image/${Date.now()}-${imageFile.originalname}`
-    // console.log(req.file);
-    // console.log(req.body.title);
+import redisClient from '../connectRedis.js';
 
 
-    const ImageParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: imageFileKey,
-        Body: imageFile.buffer,
-        ContentType: imageFile.mimetype,
-    }
+export const searchRecipe = async (req, res) => {
+    let query = req.params.query
+    // query = query.toLowerCase().replace(" ","_")
+    console.log(`query for : ${query}`)
+    const regex = new RegExp(query, 'i')
 
-    // video
-    const videoFile = req.files['videoFile'][0]
-    const videoFileKey = `video/${Date.now()}-${videoFile.originalname}`
-    // console.log(videoFile);
-
-    const VideoParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: videoFileKey,
-        Body: videoFile.buffer,
-        ContentType: videoFile.mimetype
-    }
-    
-    // recipe
-    const { recipe, ingredients, steps } = req.body
-
-    const { title, description, prepTime, cookTime, totalTime, servings, cuisine, category, difficulty, author } = JSON.parse(recipe)
-    
+    const redisKey = `recipe:${query}`
     try {
-        const ImageData = await s3.upload(ImageParams).promise();
-        const VideoData = await s3.upload(VideoParams).promise();
+        // try redis cache
+        // const cacheData = await redisClient.get(redisKey)
+        // if(cacheData){
+        //     console.log("Cache hit")
+        //     return res.status(200).json({
+        //         success: true,
+        //         data: JSON.parse(cacheData)
+        //     })
+        // }
 
-        const recipe = await Recipe.create(
-            {
-                title, description, prepTime, cookTime, totalTime, servings, cuisine, category, difficulty, author, 
-                ingredients: JSON.parse(ingredients),
-                steps: JSON.parse(steps),
-                image: ImageData.Location,
-                video: VideoData.Location
-            }
-        )
+        // if cache miss, fetch from DB
+        const results = await Recipe.find({
+            $or: [
+                { title: regex },
+                { category: regex },
+            ]
+        })
+            .limit(10)
+            .select('title category cuisine')
 
-        // APIResponseSuccess(res, "Recipe Added to DB", 200, recipe)
-        res.status(200).json({
+        console.log(results);
+
+        if (results)
+            // await redisClient.setEx(redisKey, 600, JSON.stringify(results));
+            return res.status(200).json({
+                success: true,
+                data: results
+            })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
+    }
+    // check redis cache
+    // if cache present, return from cache
+
+    // if cache missing, fetch from DB
+}
+
+export const viewRecipe = async (req, res) => {
+    const id = req.params.index
+    try {
+        const jsonData = await Recipe.findById({ _id: id })
+        return res.status(200).json({
             success: true,
-            message: "Recipe Added to Database"
+            data: {
+                general: {
+                    title: jsonData.title,
+                    description: jsonData.description,
+                    prepTime: jsonData.prepTime, // in minutes
+                    cookTime: jsonData.cookTime, // in minutes
+                    totalTime: jsonData.totalTime, // computed or manually added
+                    servings: jsonData.servings,
+                    cuisine: jsonData.cuisine, // e.g. "Italian", "Mexican"
+                    category: jsonData.category, // e.g. "Dessert", "Main Dish"
+                    difficulty: jsonData.difficulty,
+                    author: jsonData.author
+                },
+                nutrition: {
+                    calories: jsonData.calories,
+                    protein: jsonData.protein,
+                    carbs: jsonData.carbs,
+                    fat: jsonData.fats,
+                },
+                ingredients: jsonData.ingredients,
+                steps: jsonData.steps,
+                media: {
+                    image: jsonData.image,
+                    video: jsonData.video
+                },
+                reviews: jsonData.reviews,
+            }
         })
     }
     catch (err) {
         console.log(err);
-        APIResponseError(req, err, 500)
+        return res.status(500).json({
+            success: false
+        })
     }
 
 }

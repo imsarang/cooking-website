@@ -1,57 +1,146 @@
 services:
-  auth_backend_1:
+  redis:
+    image: redis:7.0.11
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - cooking-web
+  zookeeper:
+      image: confluentinc/cp-zookeeper:7.4.0
+      container_name: zookeeper
+      environment:
+        ZOOKEEPER_CLIENT_PORT: 2181
+        ZOOKEEPER_TICK_TIME: 2000
+      ports:
+        - "2181:2181"
+      networks:
+        - cooking-web
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=200000000
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=200000000
+      - KAFKA_FETCH_MESSAGE_MAX_BYTES=200000000
+      - KAFKA_MAX_REQUEST_SIZE=200000000
+      - KAFKA_SOCKET_REQUEST_MAX_BYTES=200000000  # <--- ADD THIS LINE
+      - KAFKA_SOCKET_RECEIVE_BUFFER_BYTES=200000000 # <--- ADD THIS LINE (optional but helpful)
+      - KAFKA_SOCKET_SEND_BUFFER_BYTES=200000000 # <--- ADD THIS LINE (optional but helpful)
+      - KAFKA_BROKER_ID=${KAFKA_BROKER_ID}
+      - KAFKA_ZOOKEEPER_CONNECT=${KAFKA_ZOOKEEPER_CONNECT}
+      - KAFKA_ADVERTISED_LISTENERS=${KAFKA_ADVERTISED_LISTENERS}
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKAJS_NO_PARTITIONER_WARNING=1
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+
+    networks:
+      - cooking-web
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/kafka/9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  auth_backend:
     build:  ./user-auth/.
-    container_name: backend
+    container_name: auth-backend
     environment:
       - AUTH_SERVER_PORT=${AUTH_BACKEND_PORT_1}
       - FRONTEND_ENDPOINT=${MAIN_URL}
+      - NODE_ENV=production
     ports:
       - "${AUTH_BACKEND_PORT_1}:${NGINX_PORT}"
+    env_file:
+      - .env.prod
     networks:
       - cooking-web
     restart: always
-    env_file:
-      - ./user-auth/.env
-    
-  auth_backend_2:
-    build:  ./user-auth/.
-    container_name: backend-2
+    depends_on:
+      - kafka
+  
+  recipe_backend:
+    build:  ./user-recipe/.
+    container_name: recipe-backend
     environment:
-      - AUTH_SERVER_PORT=${AUTH_BACKEND_PORT_2}
+      - AUTH_SERVER_PORT=${RECIPE_BACKEND_PORT_1}
       - FRONTEND_ENDPOINT=${MAIN_URL}
+      - NODE_ENV=production
     ports:
-      - "${AUTH_BACKEND_PORT_2}:${NGINX_PORT}"
+      - "${RECIPE_BACKEND_PORT_1}:${NGINX_PORT}"
+    env_file:
+      - .env.prod
     networks:
       - cooking-web
-    restart: always
-    env_file:
-      - ./user-auth/.env
-
+    restart: on-failure
+    depends_on:
+      - kafka
+    
   frontend:
     build:  
-      context : ./frontend/.
+      context : ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
-    command: ["echo","Front Built Successfully"]
-    volumes:
-      - frontend_build:/app/out
+    command: ["npm","run", "start"]
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
     networks:
       - cooking-web
-
+    depends_on:
+      - kafka
   nginx:
     build: 
       context : ./nginx/.
     container_name: nginx
+    image: nginx
     ports:
       - "${NGINX_PORT}:${NGINX_PORT}"
-    volumes:
-      - frontend_build:/usr/share/nginx/html
     networks:
       - cooking-web
     restart: always
+    depends_on:
+      - auth_backend
+      - recipe_backend
+      - frontend
+
+  worker:
+    build:  ./worker/.
+    container_name: worker
+    depends_on:
+      kafka:
+          condition: service_healthy
+      auth_backend:
+          condition: service_started
+      recipe_backend:
+          condition: service_started
+      nginx:
+          condition: service_started
+    command: ["/usr/local/bin/wait-for-it.sh", "kafka:9092", "--timeout=30", "--strict", "--", "node", "worker.js"]
+    environment:
+      - MONGO_DB_URI=${MONGO_DB_URI}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+      - KAFKA_BROKER=${KAFKA_BROKER}
+    networks:
+      - cooking-web
   
 volumes:
-  frontend_build: 
-    name: frontend_build
+  redis_data:
+    name: redis_data
+
 networks:
   cooking-web:
     name: cooking-web

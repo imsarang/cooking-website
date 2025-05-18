@@ -1,0 +1,94 @@
+.general-information{
+    margin: 2% 0 0 0;
+    width:100%;
+    background-color: rgb(241, 236, 236);
+    padding: 2% 2%;
+    border-radius: 10px;
+}
+
+.general-info-header{
+    /* width:50%; */
+    font-size:20px;
+    padding: 0 0 2% 0;
+}
+
+/* title, author, difficulty */
+.general-info-title{
+    width:100%;
+    display:flex;
+}
+
+.general-info-recipe{
+    width:100%;
+    padding:0 2% 0 0;
+}
+
+.general-info-author{
+    width:100%;
+}
+
+.general-info-difficulty{
+    width:50%;
+    height: 100%;
+    padding:0 2%;
+}
+/* description */
+.general-info-desc{
+    padding:2% 0 2% 0;
+    width:100%;
+    position:relative;
+}
+.create-desc-message{
+    outline:none;
+    resize: none;
+    border:1px solid black;
+    width:100%;
+    border-radius: 10px;
+    padding:2%;
+}
+.create-desc-label{
+    position:absolute;
+    left:0%;
+    padding:2% 2%;
+    pointer-events:none;
+    transition: 0.4s;
+}
+
+.create-desc-message:focus,
+.create-desc-message:valid{
+    border:2px solid rgb(157, 153, 153);
+}
+
+.create-desc-message:focus + .create-desc-label,
+.create-desc-message:valid + .create-desc-label{
+    color:black;
+    transform: translateX(10px) translateY(-10px);
+    font-size: 0.75em;
+    padding:2px;
+    background-color: rgb(241, 236, 236);
+    /* background-color: red; */
+}
+
+/* extras */
+.general-info-extras{
+    width:100%;
+    display:flex;
+}
+
+.general-info-category{
+    width:100%;
+}
+
+.general-info-cuisine{
+    width:100%;
+}
+
+/* duration */
+.general-info-duration{
+    width:100%;
+    display: flex;
+}
+
+.general-info-prep-time, .general-info-cook-time, .general-info-total-time{
+    padding: 0 2% 0 0;
+}

@@ -9,12 +9,13 @@ interface FormInputProps {
     name: string
     value: string
     setData: (name: string, value: string) => void
+    handleKeyDown?: (e: React.KeyboardEvent) => void
 }
 
-const FormInput: React.FC<FormInputProps> = ({ label, type, name, value, setData }) => {
+const FormInput: React.FC<FormInputProps> = ({ ...props }: FormInputProps) => {
 
     const handleChange = (e: any) => {
-        setData(e.target.name, e.target.value)
+        props.setData(e.target.name, e.target.value)
         // console.log(data);
     }
 
@@ -23,14 +24,15 @@ const FormInput: React.FC<FormInputProps> = ({ label, type, name, value, setData
             <div className={`inputBox `}>
                 <input
                     className='input'
-                    type={type}
+                    type={props.type}
                     required
-                    name={name}
+                    name={props.name}
                     onChange={(e) => handleChange(e)}
-                    value={value}
+                    onKeyDown={(e)=> props.handleKeyDown?.(e)}
+                    value={props.value}
                 />
                 <span className={`label`}>
-                    {label}
+                    {props.label}
                 </span>
             </div>
         </div>

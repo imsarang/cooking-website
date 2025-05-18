@@ -1,5 +1,5 @@
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight, FaArrowCircleRight, FaHeart, FaHome, FaPlus, FaSearch, FaUser, FaUserCheck } from 'react-icons/fa';
-import { FaAutoprefixer, FaBots, FaGear } from 'react-icons/fa6';
+import { FaAutoprefixer, FaBots, FaGear, FaMessage } from 'react-icons/fa6';
 import { Preahvihear } from 'next/font/google';
 
 export const sidebarContentLoggedOut = [
@@ -22,6 +22,11 @@ export const sidebarContentLoggedOut = [
         image: <FaPlus />,
         text: "Add Recipe",
         key: 3
+    },
+    {
+        image: <FaMessage />,
+        text: "Chat",
+        key: 4
     }
 ]
 

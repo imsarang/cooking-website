@@ -1,16 +1,24 @@
-# Build stage
-FROM node:18 
+# --- Build Stage ---
+FROM node:18-alpine AS builder
+
 WORKDIR /app
+
 COPY package*.json ./
-# RUN ls -ltr /app  
+RUN npm install
 
-RUN if [ -f "package.json" ]; then npm install; else echo "Error:Cannot download dependencies"; fi
 COPY . .
-RUN npm run build || (echo "Build failed" && exit 1) 
+RUN npm run build
 
-RUN mkdir -p /frontend_build && if [ -d "out" ]; then cp -r ./out/* /frontend_build/; else echo "Warning: 'out/' does not exist"; fi
-# RUN ls -ltr /frontend_build
+# --- Production Stage ---
+FROM node:18-alpine
 
-# EXPOSE 3000
-# 
-# CMD ["npm", "start"]
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+# Use production mode
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

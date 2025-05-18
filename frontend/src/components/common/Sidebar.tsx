@@ -8,7 +8,7 @@ import { sidebarContentLoggedOut, sidebasrContentLoggedIn } from '../../../gener
 
 
 interface SidebarProps {
-  token: string,
+  token: string | null,
 }
 
 interface SidebarContent {
@@ -46,11 +46,18 @@ const Sidebar = ({token}: SidebarProps) => {
       case 0:
         router.push('/')
         break;
+      case 1:
+        router.push('/search')
+        break;
       case 2:
         router.push('/account')
         break;
       case 3:
         router.push('/create/recipe')
+        break;
+      case 4:
+        router.push('/chat')
+        break;
       default:
         break;
     }

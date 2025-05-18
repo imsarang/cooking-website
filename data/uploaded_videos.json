@@ -1,0 +1,23 @@
+[
+  [],
+  {
+    "filename": "recipe_1_video.mp4",
+    "url": "https://funfoods-static-assets-01.s3.amazonaws.com/video/recipe_1_video.mp4"
+  },
+  {
+    "filename": "recipe_2_video.mp4",
+    "url": "https://funfoods-static-assets-01.s3.amazonaws.com/video/recipe_2_video.mp4"
+  },
+  {
+    "filename": "recipe_3_video.mp4",
+    "url": "https://funfoods-static-assets-01.s3.amazonaws.com/video/recipe_3_video.mp4"
+  },
+  {
+    "filename": "recipe_4_video.mp4",
+    "url": "https://funfoods-static-assets-01.s3.amazonaws.com/video/recipe_4_video.mp4"
+  },
+  {
+    "filename": "recipe_5_video.mp4",
+    "url": "https://funfoods-static-assets-01.s3.amazonaws.com/video/recipe_5_video.mp4"
+  }
+]

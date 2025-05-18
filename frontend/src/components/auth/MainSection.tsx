@@ -80,7 +80,11 @@ const MainSection = () => {
       return
     }
 
-    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/login`, 'POST', loginData)
+    const result = await APIFetchRequest(
+      `${fetchServerEndpointAuth()}/api/auth/login`, 
+      'POST', 
+      loginData
+    )
 
     if (result.success) 
     {

@@ -1,0 +1,24 @@
+.nutrition{
+    width:100%;
+    background-color: rgb(241, 236, 236);
+    margin:2% 0 0 0;
+    border-radius: 10px;
+    padding: 2%;
+}
+
+.nutrition-header{
+    font-size:20px;
+    padding: 0 0 1% 0;
+}
+
+.nutrition-content{
+    display:flex;
+    align-items: center;
+    width:100%;
+    padding: 1% 0;
+}
+
+.carbs ,.protein , .fat , .calories{
+    /* margin: 0 2% 0 0; */
+    padding: 1%;
+}

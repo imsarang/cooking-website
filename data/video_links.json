@@ -1,0 +1,24 @@
+{
+  "videos": [
+    {
+      "filename": "recipe_1_video.mp4",
+      "source_url": "https://www.youtube.com/watch?v=D_2DBLAt57c"
+    },
+    {
+      "filename": "recipe_2_video.mp4",
+      "source_url": "https://www.youtube.com/watch?v=RtFJmmLLuZk"
+    },
+    {
+      "filename": "recipe_3_video.mp4",
+      "source_url": "https://www.youtube.com/watch?v=s_Afna4aaws"
+    },
+    {
+      "filename": "recipe_4_video.mp4",
+      "source_url": "https://www.youtube.com/watch?v=vcfNpDtVqOw&pp=ygUQTWFyZ2hlcml0YSBQaXp6YQ%3D%3D"
+    },
+    {
+      "filename": "recipe_5_video.mp4",
+      "source_url": "https://www.youtube.com/watch?v=ybwmv5weeuM&pp=ygUNc2hyaW1wIHNjYW1wadIHCQmECQGHKiGM7w%3D%3D"
+    }
+  ]
+}

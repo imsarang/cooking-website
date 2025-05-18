@@ -1,0 +1,1983 @@
+[
+  {
+    "title": "Paneer Butter Masala",
+    "description": "A delicious paneer butter masala recipe.",
+    "nutrition": {
+      "calories": 206,
+      "protein": "15g",
+      "carbs": "42g",
+      "fat": "9g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 16,
+    "cookTime": 33,
+    "totalTime": 49,
+    "servings": 2,
+    "cuisine": "Chinese",
+    "category": "Appetizer",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "gluten-free",
+      "salty"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730396",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "paneer,butter,masala",
+    "updatedAt": "2025-05-13 14:05:26.730400"
+  },
+  {
+    "title": "Kung Pao Chicken",
+    "description": "A delicious kung pao chicken recipe.",
+    "nutrition": {
+      "calories": 272,
+      "protein": "30g",
+      "carbs": "17g",
+      "fat": "10g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 20,
+    "cookTime": 26,
+    "totalTime": 46,
+    "servings": 3,
+    "cuisine": "Russian",
+    "category": "Side Dish",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "vegan",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730427",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "kung,pao,chicken",
+    "updatedAt": "2025-05-13 14:05:26.730429"
+  },
+  {
+    "title": "Pelmeni",
+    "description": "A delicious pelmeni recipe.",
+    "nutrition": {
+      "calories": 447,
+      "protein": "14g",
+      "carbs": "43g",
+      "fat": "10g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 18,
+    "cookTime": 43,
+    "totalTime": 61,
+    "servings": 3,
+    "cuisine": "Russian",
+    "category": "Snack",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730452",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "pelmeni",
+    "updatedAt": "2025-05-13 14:05:26.730453"
+  },
+  {
+    "title": "Chole Bhature",
+    "description": "A delicious chole bhature recipe.",
+    "nutrition": {
+      "calories": 302,
+      "protein": "5g",
+      "carbs": "28g",
+      "fat": "11g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 27,
+    "cookTime": 60,
+    "totalTime": 87,
+    "servings": 4,
+    "cuisine": "Russian",
+    "category": "Snack",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730467",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "chole,bhature",
+    "updatedAt": "2025-05-13 14:05:26.730468"
+  },
+  {
+    "title": "Sweet and Sour Pork",
+    "description": "A delicious sweet and sour pork recipe.",
+    "nutrition": {
+      "calories": 155,
+      "protein": "22g",
+      "carbs": "29g",
+      "fat": "8g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 21,
+    "cookTime": 33,
+    "totalTime": 54,
+    "servings": 5,
+    "cuisine": "Indian",
+    "category": "Snack",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730489",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "sweet,and,sour,pork",
+    "updatedAt": "2025-05-13 14:05:26.730490"
+  },
+  {
+    "title": "Borscht",
+    "description": "A delicious borscht recipe.",
+    "nutrition": {
+      "calories": 353,
+      "protein": "28g",
+      "carbs": "48g",
+      "fat": "15g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 24,
+    "cookTime": 21,
+    "totalTime": 45,
+    "servings": 4,
+    "cuisine": "Indian",
+    "category": "Dessert",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "gluten-free"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730515",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "borscht",
+    "updatedAt": "2025-05-13 14:05:26.730516"
+  },
+  {
+    "title": "Chicken Biryani",
+    "description": "A delicious chicken biryani recipe.",
+    "nutrition": {
+      "calories": 102,
+      "protein": "20g",
+      "carbs": "32g",
+      "fat": "15g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 29,
+    "cookTime": 34,
+    "totalTime": 63,
+    "servings": 2,
+    "cuisine": "Indian",
+    "category": "Snack",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730542",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "chicken,biryani",
+    "updatedAt": "2025-05-13 14:05:26.730543"
+  },
+  {
+    "title": "Vegetable Stir Fry",
+    "description": "A delicious vegetable stir fry recipe.",
+    "nutrition": {
+      "calories": 398,
+      "protein": "23g",
+      "carbs": "32g",
+      "fat": "18g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 23,
+    "cookTime": 44,
+    "totalTime": 67,
+    "servings": 3,
+    "cuisine": "Indian",
+    "category": "Side Dish",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "spicy",
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730574",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "vegetable,stir,fry",
+    "updatedAt": "2025-05-13 14:05:26.730575"
+  },
+  {
+    "title": "Beet Salad",
+    "description": "A delicious beet salad recipe.",
+    "nutrition": {
+      "calories": 342,
+      "protein": "18g",
+      "carbs": "54g",
+      "fat": "20g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 30,
+    "cookTime": 56,
+    "totalTime": 86,
+    "servings": 6,
+    "cuisine": "Russian",
+    "category": "Main Dish",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730598",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "beet,salad",
+    "updatedAt": "2025-05-13 14:05:26.730599"
+  },
+  {
+    "title": "Rajma Chawal",
+    "description": "A delicious rajma chawal recipe.",
+    "nutrition": {
+      "calories": 337,
+      "protein": "29g",
+      "carbs": "60g",
+      "fat": "7g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 30,
+    "cookTime": 38,
+    "totalTime": 68,
+    "servings": 5,
+    "cuisine": "Chinese",
+    "category": "Side Dish",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730621",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "rajma,chawal",
+    "updatedAt": "2025-05-13 14:05:26.730622"
+  },
+  {
+    "title": "Fried Rice",
+    "description": "A delicious fried rice recipe.",
+    "nutrition": {
+      "calories": 362,
+      "protein": "11g",
+      "carbs": "42g",
+      "fat": "17g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 10,
+    "cookTime": 33,
+    "totalTime": 43,
+    "servings": 2,
+    "cuisine": "Russian",
+    "category": "Side Dish",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan",
+      "salty",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730637",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "fried,rice",
+    "updatedAt": "2025-05-13 14:05:26.730638"
+  },
+  {
+    "title": "Shchi",
+    "description": "A delicious shchi recipe.",
+    "nutrition": {
+      "calories": 438,
+      "protein": "19g",
+      "carbs": "19g",
+      "fat": "16g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 13,
+    "cookTime": 48,
+    "totalTime": 61,
+    "servings": 2,
+    "cuisine": "Russian",
+    "category": "Dessert",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "sweet",
+      "vegan",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730659",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "shchi",
+    "updatedAt": "2025-05-13 14:05:26.730662"
+  },
+  {
+    "title": "Samosa",
+    "description": "A delicious samosa recipe.",
+    "nutrition": {
+      "calories": 278,
+      "protein": "25g",
+      "carbs": "25g",
+      "fat": "12g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 19,
+    "cookTime": 45,
+    "totalTime": 64,
+    "servings": 3,
+    "cuisine": "Russian",
+    "category": "Main Dish",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730683",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "samosa",
+    "updatedAt": "2025-05-13 14:05:26.730684"
+  },
+  {
+    "title": "Dumplings",
+    "description": "A delicious dumplings recipe.",
+    "nutrition": {
+      "calories": 279,
+      "protein": "21g",
+      "carbs": "16g",
+      "fat": "20g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 29,
+    "cookTime": 59,
+    "totalTime": 88,
+    "servings": 4,
+    "cuisine": "Chinese",
+    "category": "Snack",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730704",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "dumplings",
+    "updatedAt": "2025-05-13 14:05:26.730705"
+  },
+  {
+    "title": "Aloo Paratha",
+    "description": "A delicious aloo paratha recipe.",
+    "nutrition": {
+      "calories": 440,
+      "protein": "28g",
+      "carbs": "15g",
+      "fat": "11g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 17,
+    "cookTime": 34,
+    "totalTime": 51,
+    "servings": 5,
+    "cuisine": "Russian",
+    "category": "Side Dish",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "spicy",
+      "gluten-free"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730735",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "aloo,paratha",
+    "updatedAt": "2025-05-13 14:05:26.730736"
+  },
+  {
+    "title": "Mapo Tofu",
+    "description": "A delicious mapo tofu recipe.",
+    "nutrition": {
+      "calories": 170,
+      "protein": "8g",
+      "carbs": "22g",
+      "fat": "23g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 22,
+    "cookTime": 22,
+    "totalTime": 44,
+    "servings": 5,
+    "cuisine": "Russian",
+    "category": "Snack",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730748",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "mapo,tofu",
+    "updatedAt": "2025-05-13 14:05:26.730749"
+  },
+  {
+    "title": "Kasha",
+    "description": "A delicious kasha recipe.",
+    "nutrition": {
+      "calories": 111,
+      "protein": "29g",
+      "carbs": "28g",
+      "fat": "5g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 25,
+    "cookTime": 51,
+    "totalTime": 76,
+    "servings": 5,
+    "cuisine": "Russian",
+    "category": "Appetizer",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "gluten-free",
+      "vegan",
+      "salty"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730761",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "kasha",
+    "updatedAt": "2025-05-13 14:05:26.730762"
+  },
+  {
+    "title": "Malai Kofta",
+    "description": "A delicious malai kofta recipe.",
+    "nutrition": {
+      "calories": 215,
+      "protein": "25g",
+      "carbs": "55g",
+      "fat": "7g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 21,
+    "cookTime": 34,
+    "totalTime": 55,
+    "servings": 3,
+    "cuisine": "Chinese",
+    "category": "Appetizer",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "gluten-free",
+      "spicy",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730781",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "malai,kofta",
+    "updatedAt": "2025-05-13 14:05:26.730783"
+  },
+  {
+    "title": "General Tso's Chicken",
+    "description": "A delicious general tso's chicken recipe.",
+    "nutrition": {
+      "calories": 260,
+      "protein": "27g",
+      "carbs": "45g",
+      "fat": "16g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 23,
+    "cookTime": 58,
+    "totalTime": 81,
+    "servings": 3,
+    "cuisine": "Indian",
+    "category": "Appetizer",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730807",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "general,tso's,chicken",
+    "updatedAt": "2025-05-13 14:05:26.730809"
+  },
+  {
+    "title": "Syrniki",
+    "description": "A delicious syrniki recipe.",
+    "nutrition": {
+      "calories": 322,
+      "protein": "8g",
+      "carbs": "43g",
+      "fat": "11g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 23,
+    "cookTime": 55,
+    "totalTime": 78,
+    "servings": 6,
+    "cuisine": "Chinese",
+    "category": "Dessert",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "spicy",
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730822",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "syrniki",
+    "updatedAt": "2025-05-13 14:05:26.730823"
+  },
+  {
+    "title": "Butter Chicken",
+    "description": "A delicious butter chicken recipe.",
+    "nutrition": {
+      "calories": 369,
+      "protein": "23g",
+      "carbs": "48g",
+      "fat": "9g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 16,
+    "cookTime": 48,
+    "totalTime": 64,
+    "servings": 2,
+    "cuisine": "Chinese",
+    "category": "Appetizer",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730835",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "butter,chicken",
+    "updatedAt": "2025-05-13 14:05:26.730836"
+  },
+  {
+    "title": "Gobi Manchurian",
+    "description": "A delicious gobi manchurian recipe.",
+    "nutrition": {
+      "calories": 107,
+      "protein": "24g",
+      "carbs": "11g",
+      "fat": "7g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 13,
+    "cookTime": 25,
+    "totalTime": 38,
+    "servings": 5,
+    "cuisine": "Indian",
+    "category": "Dessert",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730850",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "gobi,manchurian",
+    "updatedAt": "2025-05-13 14:05:26.730851"
+  },
+  {
+    "title": "Okroshka",
+    "description": "A delicious okroshka recipe.",
+    "nutrition": {
+      "calories": 363,
+      "protein": "12g",
+      "carbs": "38g",
+      "fat": "8g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 30,
+    "cookTime": 24,
+    "totalTime": 54,
+    "servings": 6,
+    "cuisine": "Russian",
+    "category": "Snack",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet",
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730873",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "okroshka",
+    "updatedAt": "2025-05-13 14:05:26.730876"
+  },
+  {
+    "title": "Tandoori Chicken",
+    "description": "A delicious tandoori chicken recipe.",
+    "nutrition": {
+      "calories": 354,
+      "protein": "5g",
+      "carbs": "50g",
+      "fat": "8g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 14,
+    "cookTime": 38,
+    "totalTime": 52,
+    "servings": 2,
+    "cuisine": "Indian",
+    "category": "Appetizer",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730897",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "tandoori,chicken",
+    "updatedAt": "2025-05-13 14:05:26.730898"
+  },
+  {
+    "title": "Hakka Noodles",
+    "description": "A delicious hakka noodles recipe.",
+    "nutrition": {
+      "calories": 392,
+      "protein": "5g",
+      "carbs": "48g",
+      "fat": "19g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 15,
+    "cookTime": 57,
+    "totalTime": 72,
+    "servings": 6,
+    "cuisine": "Chinese",
+    "category": "Side Dish",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730917",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "hakka,noodles",
+    "updatedAt": "2025-05-13 14:05:26.730918"
+  },
+  {
+    "title": "Blini",
+    "description": "A delicious blini recipe.",
+    "nutrition": {
+      "calories": 371,
+      "protein": "16g",
+      "carbs": "19g",
+      "fat": "17g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 28,
+    "cookTime": 34,
+    "totalTime": 62,
+    "servings": 5,
+    "cuisine": "Chinese",
+    "category": "Dessert",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan",
+      "gluten-free",
+      "spicy"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730933",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "blini",
+    "updatedAt": "2025-05-13 14:05:26.730934"
+  },
+  {
+    "title": "Masala Dosa",
+    "description": "A delicious masala dosa recipe.",
+    "nutrition": {
+      "calories": 483,
+      "protein": "18g",
+      "carbs": "36g",
+      "fat": "6g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 27,
+    "cookTime": 48,
+    "totalTime": 75,
+    "servings": 5,
+    "cuisine": "Russian",
+    "category": "Dessert",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730954",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "masala,dosa",
+    "updatedAt": "2025-05-13 14:05:26.730960"
+  },
+  {
+    "title": "Chicken Curry",
+    "description": "A delicious chicken curry recipe.",
+    "nutrition": {
+      "calories": 382,
+      "protein": "25g",
+      "carbs": "38g",
+      "fat": "15g"
+    },
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g"
+      },
+      {
+        "name": "Tomato Puree",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Cream",
+        "quantity": "1/4 cup"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Heat oil and saut\u00e9 onions until golden brown.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Add tomato puree and cook until oil separates.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Add paneer and cream, simmer for 5 minutes.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 22,
+    "cookTime": 42,
+    "totalTime": 64,
+    "servings": 6,
+    "cuisine": "Russian",
+    "category": "Snack",
+    "difficulty": "Hard",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "sweet"
+    ],
+    "createdAt": "2025-05-13 14:05:26.730975",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "chicken,curry",
+    "updatedAt": "2025-05-13 14:05:26.730976"
+  },
+  {
+    "title": "Poha",
+    "description": "A delicious poha recipe.",
+    "nutrition": {
+      "calories": 383,
+      "protein": "17g",
+      "carbs": "58g",
+      "fat": "24g"
+    },
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "2 tbsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Marinate chicken with soy sauce and chili paste.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Stir-fry chicken with peanuts and vegetables.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Cook until chicken is tender and serve hot.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 28,
+    "cookTime": 56,
+    "totalTime": 84,
+    "servings": 6,
+    "cuisine": "Russian",
+    "category": "Dessert",
+    "difficulty": "Easy",
+    "author": null,
+    "veg": true,
+    "image": "",
+    "video": "",
+    "tags": [
+      "gluten-free",
+      "salty"
+    ],
+    "createdAt": "2025-05-13 14:05:26.731001",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "poha",
+    "updatedAt": "2025-05-13 14:05:26.731002"
+  },
+  {
+    "title": "Egg Fried Rice",
+    "description": "A delicious egg fried rice recipe.",
+    "nutrition": {
+      "calories": 136,
+      "protein": "26g",
+      "carbs": "11g",
+      "fat": "18g"
+    },
+    "ingredients": [
+      {
+        "name": "Flour",
+        "quantity": "1 cup"
+      },
+      {
+        "name": "Water",
+        "quantity": "1/2 cup"
+      },
+      {
+        "name": "Salt",
+        "quantity": "1 tsp"
+      }
+    ],
+    "steps": [
+      {
+        "stepNumber": 1,
+        "description": "Mix flour, salt, and water to form a dough.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 2,
+        "description": "Roll out and fill with desired filling.",
+        "image": "",
+        "video": ""
+      },
+      {
+        "stepNumber": 3,
+        "description": "Boil the dumplings until they float.",
+        "image": "",
+        "video": ""
+      }
+    ],
+    "prepTime": 26,
+    "cookTime": 57,
+    "totalTime": 83,
+    "servings": 5,
+    "cuisine": "Russian",
+    "category": "Appetizer",
+    "difficulty": "Medium",
+    "author": null,
+    "veg": false,
+    "image": "",
+    "video": "",
+    "tags": [
+      "salty",
+      "vegan"
+    ],
+    "createdAt": "2025-05-13 14:05:26.731015",
+    "favouritedBy": [],
+    "dowloads": [],
+    "reviews": [],
+    "averageRating": 0,
+    "searchTags": "egg,fried,rice",
+    "updatedAt": "2025-05-13 14:05:26.731016"
+  }
+]

@@ -1,0 +1,69 @@
+.create-recipe-steps{
+    width:100%;
+    background-color: rgb(241, 236, 236);
+    margin:2% 0 0 0;
+    border-radius: 10px;
+    padding: 2%;
+}
+
+/* Header */
+.create-recipe-steps-header{
+    font-size:20px;
+    padding: 0 0 1% 0;
+}
+.create-recipe-step-header{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* step number */
+.create-recipe-step-number{
+    padding: 2% 0;
+}
+
+/* Description */
+.step-description-content{
+    outline:none;
+    resize: none;
+    border:1px solid black;
+    width:100%;
+    border-radius: 10px;
+    padding:2%;
+}
+
+.create-steps-desc-label{
+    position:absolute;
+    left:0%;
+    /* top:0%; */
+    padding:1% 4%;
+    pointer-events:none;
+    transition: 0.4s;
+}
+
+.step-description-content:focus,
+.step-description-content:valid{
+    border:2px solid rgb(157, 153, 153);
+}
+
+.step-description-content:focus + .create-steps-desc-label,
+.step-description-content:valid + .create-steps-desc-label{
+    color:black;
+    transform: translateX(70px) translateY(-10px);
+    font-size: 0.75em;
+    padding:2px;
+    background-color: rgb(241, 236, 236);
+    /* background-color: red; */
+}
+
+/* add button */
+.add-step-btn-wrapper{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: orange;
+    padding:2%;
+    margin:2% 0 0 0;
+    border-radius: 10px;
+    cursor: pointer;
+}

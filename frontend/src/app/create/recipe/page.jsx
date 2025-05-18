@@ -14,8 +14,9 @@ import Steps from '@/components/create/recipe/Steps'
 import Media from '@/components/create/recipe/Media'
 
 import { validateRecipe, validateIngredients } from '@/middleware/recipe'
-import { APIFetchRequestWithToken, fetchServerEndpointRecipe } from '@/middleware/common'
+import { APIFetchRequestWithToken,APIFetchRequestWithTokenFormData, fetchServerEndpointRecipe } from '@/middleware/common'
 import {fetchFromLocalStorage} from '@/utils/LocalStorage'
+import Nutrition from '@/components/create/recipe/Nutrition';
 
 const sampleRecipe = {
   title: "Classic Pancakes",
@@ -31,6 +32,12 @@ const sampleRecipe = {
   tags: ["easy", "breakfast"],
 };
 
+const sampleNutrition = {
+  calories: 350,
+  protein: "8g",
+  fat: "10g",
+  carbs: "55g",
+}
 const sampleIngredients = [
   { index: 0, name: "Flour", quantity: "1 cup" },
   { index: 1, name: "Milk", quantity: "1 cup" },
@@ -74,6 +81,14 @@ const recipe = () => {
     video: ""
   })
 
+  const [nutrition, setNutrition] = useState({
+    calories: "",
+    protein: "",
+    carbs: "",
+    fat: "",
+    // add more if needed
+  })
+
   const [ingredients, setIngredients] = useState([{
     index: Date.now(),
     name: "",
@@ -102,10 +117,15 @@ const recipe = () => {
     setRecipe(sampleRecipe)
     setIngredients(sampleIngredients)
     setSteps(sampleSteps)
+    setNutrition(sampleNutrition)
   },[])
 
   const handleCreateRecipe = (name, value) => {
     setRecipe({ ...recipe, [name]: value })
+  }
+
+  const handleAddNutrition = (name, value) => {
+    setNutrition({ ...nutrition, [name]: value })
   }
 
   const handleCreateIngredients = (e) => {
@@ -235,26 +255,26 @@ const recipe = () => {
    
     
     try{
-      setLoad(false)
+      setLoad(true)
     const formData = new FormData()
     formData.append("imageFile", imageFile)
     formData.append("recipe", JSON.stringify(recipe))
     formData.append("ingredients", JSON.stringify(ingredients))
     formData.append("steps", JSON.stringify(steps))
     formData.append("videoFile", videoFile)
+    formData.append("nutrition", JSON.stringify(nutrition))
     
-    const uploadMedia = await fetch(`http://localhost:3002/api/recipe/create`,{
-      method:'POST',
-      headers:{
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData
-    })
+    const uploadMedia = await APIFetchRequestWithTokenFormData(
+      `${fetchServerEndpointRecipe()}/api/recipe/create`,
+      token,
+      'POST',
+      formData
+    )
 
     if(!uploadMedia.ok)
       throw new Error("Image not Uploaded")
     
-    setLoad(true)
+    setLoad(false)
     router.push('/')
 
   }catch(err){
@@ -300,8 +320,10 @@ const recipe = () => {
             author={recipe.author}
             setRecipe={handleCreateRecipe}
           />
-          {/* <FormInput label={"Title"} type={"input"} name={"title"} value={recipe.title} setData={setRecipe} /> */}
-          {/* title, description, preptime, cooktime, totaltime, servings, cuisine, category, difficulty, author */}
+          <Nutrition
+            nutrition={nutrition}
+            setNutrition = {setNutrition}
+          />
 
           <Ingredients
             ingredients={ingredients}
@@ -328,7 +350,7 @@ const recipe = () => {
         />
       </div>
       {
-        !load?<div className="loading-screen">
+        load?<div className="loading-screen">
           Uploading...
         </div>
         :<></>

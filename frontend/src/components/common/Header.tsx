@@ -7,8 +7,8 @@ import { APIFetchRequest, fetchServerEndpointAuth } from '@/middleware/common';
 import '@/styles/common/header.css'
 
 interface HeaderInterface {
-    token: string
-    setToken: React.Dispatch<React.SetStateAction<string>>
+    token: string | null
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 const Header = ({token, setToken}: HeaderInterface) => {

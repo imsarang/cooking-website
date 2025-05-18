@@ -1,0 +1,24 @@
+{
+  "images": [
+    {
+      "filename": "recipe_1_main.jpg",
+      "source_url": "https://www.google.com/imgres?q=spaghetti%20carbonara&imgurl=https%3A%2F%2Fstatic01.nyt.com%2Fimages%2F2021%2F02%2F14%2Fdining%2Fcarbonara-horizontal%2Fcarbonara-horizontal-mediumSquareAt3X-v2.jpg&imgrefurl=https%3A%2F%2Fcooking.nytimes.com%2Frecipes%2F12965-spaghetti-carbonara&docid=jx046LbT6rbqkM&tbnid=tkkJqxxx5GVG9M&vet=12ahUKEwj_h4Xa8YGNAxUCdmwGHbUCARQQM3oECBsQAA..i&w=1419&h=1417&hcb=2&ved=2ahUKEwj_h4Xa8YGNAxUCdmwGHbUCARQQM3oECBsQAA"
+    },
+    {
+      "filename": "recipe_2_main.jpg",
+      "source_url": "https://in.pinterest.com/pin/342484746679107985/"
+    },
+    {
+      "filename": "recipe_3_main.jpg",
+      "source_url": "https://www.google.com/imgres?q=Chicken%20Alfredo&imgurl=https%3A%2F%2Fgimmedelicious.com%2Fwp-content%2Fuploads%2F2024%2F10%2FSkinny-Chicken-Broccoli-Alfredo-1.jpg&imgrefurl=https%3A%2F%2Fgimmedelicious.com%2Fskinny-chicken-broccoli-alfredo%2F&docid=QbCTuPjZ0Jv7SM&tbnid=9b7wt_S2s7JDDM&vet=12ahUKEwic46b_gYONAxUJklYBHR_lImAQM3oECBsQAA..i&w=2720&h=2720&hcb=2&ved=2ahUKEwic46b_gYONAxUJklYBHR_lImAQM3oECBsQAA"
+    },
+    {
+      "filename": "recipe_4_main.jpg",
+      "source_url": "https://www.google.com/imgres?q=Margherita%20Pizza&imgurl=https%3A%2F%2Fi.pinimg.com%2F736x%2F57%2Fe7%2Fa1%2F57e7a19334571946391a7430fcb86202.jpg&imgrefurl=https%3A%2F%2Fin.pinterest.com%2Fpin%2F298011700362545068%2F&docid=msdHmk8f0BVDVM&tbnid=qwY4j__lsKndxM&vet=12ahUKEwjTwOm8goONAxUtcGwGHaMCBh0QM3oECBsQAA..i&w=735&h=782&hcb=2&ved=2ahUKEwjTwOm8goONAxUtcGwGHaMCBh0QM3oECBsQAA"
+    },
+    {
+      "filename": "recipe_5_main.jpg",
+      "source_url": "https://www.google.com/imgres?q=shrimp%20scampi&imgurl=https%3A%2F%2Fcdn.jwplayer.com%2Fv2%2Fmedia%2FhPcMnXp7%2Fthumbnails%2FmCITeuJc.jpg&imgrefurl=https%3A%2F%2Fwww.allrecipes.com%2Frecipe%2F19508%2Fshrimp-scampi%2F&docid=s-P1OA_hR8kP8M&tbnid=5apFg-RTTGYJHM&vet=12ahUKEwiumPDdgoONAxW7XGwGHXw7H3IQM3oECBgQAA..i&w=720&h=406&hcb=2&ved=2ahUKEwiumPDdgoONAxW7XGwGHXw7H3IQM3oECBgQAA"
+    }
+  ]
+}

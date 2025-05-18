@@ -7,7 +7,14 @@ import connectDB from './db/connectDB.js'
 
 const app = express()
 
-dotenv.config({path: './.env'})
+if(process.env.NODE_ENV !== 'production') {
+    dotenv.config({path: '../.env.local'})
+    console.log("Development mode")
+}
+else
+{
+    console.log("Production mode")
+}
 
 const port = process.env.AUTH_SERVER_PORT || 3001
 
@@ -25,7 +32,7 @@ app.use(cors({
 }))
 
 //connect to database
-connectDB()
+const connect = await connectDB()
 
 app.use('/api/auth', userRoutes)
 
