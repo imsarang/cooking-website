@@ -7,76 +7,80 @@ import { APIFetchRequest, fetchServerEndpointAuth } from '@/middleware/common';
 import '@/styles/common/header.css'
 
 interface HeaderInterface {
-    token: string | null
-    setToken: React.Dispatch<React.SetStateAction<string | null>>
+  token: string | null
+  setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-const Header = ({token, setToken}: HeaderInterface) => {
-    const router = useRouter()
-    const [dropdown, setDropdown] = useState(false)
-    
-    useEffect(()=>{
-      console.log(token);
-      
-      if(token!=null) setDropdown(true);
-      else setDropdown(false)   
-    },[token])
+const Header = ({ token, setToken }: HeaderInterface) => {
+  const router = useRouter()
+  const [dropdown, setDropdown] = useState(false)
 
-    const handleDropdown = ()=>{
-        setDropdown(!dropdown)
-      }
-    
-    const handleLogin = ()=>{
-      router.push('/auth')
+  useEffect(() => {
+    console.log(token);
+
+    if (token != null) setDropdown(true);
+    else setDropdown(false)
+  }, [token])
+
+  const handleDropdown = () => {
+    setDropdown(!dropdown)
+  }
+
+  const handleLogin = () => {
+    router.push('/auth')
+  }
+
+  const logout = async () => {
+
+    setDropdown(!dropdown)
+
+    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/logout`,
+      'GET',
+      {
+        email: fetchFromLocalStorage('email'),
+      })
+    // const result = await APIFetchRequest(`http://backend:3001/api/auth/logout`)
+
+    if (!result.success) {
+      alert(`Error while logging out : ${result.error || result.message}`)
     }
 
-    const logout = async () => {
+    removeFromLocalStorage('AccessToken')
+    setToken("")
+    console.log("LOGOUT SUCCESS");
 
-      setDropdown(!dropdown)
-  
-      const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/logout`)
-      // const result = await APIFetchRequest(`http://backend:3001/api/auth/logout`)
-  
-      if (!result.success) {
-        alert(`Error while logging out : ${result.error || result.message}`)
-      }
-  
-      removeFromLocalStorage('AccessToken')
-      setToken("")
-      console.log("LOGOUT SUCCESS");
-  
-      router.push('/')
-    }
-    
+    router.push('/')
+  }
+
   return (
     <div className='main-menu'>
-        <div className='about-section'>
-          About
-        </div>
-        <div className='contact-section'>
-          Contact
-        </div>
-        {
-          token == undefined ?
+      <div className='about-section'>
+        About
+      </div>
+      <div className='contact-section'>
+        Contact
+      </div>
+      {
+        token == undefined ?
           <div onClick={handleLogin} className='user-login'>
-              Login
-            </div>
+            Login
+          </div>
           :
           <div className='user-section'>
-            <FaUserCircle className='user-icon' onClick={handleDropdown}/>
+            <FaUserCircle className='user-icon' onClick={handleDropdown} />
             {
-            dropdown?
-              <div className='user-dropdown'>
-                <li>Account</li>
-                <li>View Contributions</li>
-                <li>History</li>
-                <li onClick={logout}>Logout</li>
-              </div>
-              :<></>
+              dropdown ?
+                <div className='user-dropdown'>
+                  <li>Account</li>
+                  <li>View Contributions</li>
+                  <li>History</li>
+                  <li onClick={logout}>Logout</li>
+                </div>
+                : <></>
             }
-        </div> 
-        }
-      </div>
+          </div>
+      }
+    </div>
   )
 }
 

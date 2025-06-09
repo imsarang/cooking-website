@@ -1,88 +1,132 @@
 import { fetchFromLocalStorage, removeFromLocalStorage, storeInLocalStorage } from "@/utils/LocalStorage"
 import { jwtDecode } from 'jwt-decode'
 
+export const fetchServerEndpointAuth = () => {
+    console.log(process.env.NODE_ENV);
+    
+    return process.env.NODE_ENV === 'production'?
+        "http://localhost"
+        :
+        "http://localhost:3001"
+    // return process.env.NEXT_PUBLIC_AUTH_SERVER_ENDPOINT || 'http://localhost';
+    // return `http://localhost`
+}
+
+export const fetchServerEndpointRecipe = () => {
+    console.log(process.env.NODE_ENV);
+    return process.env.NODE_ENV === 'production'?
+        "http://localhost"
+        :
+        "http://localhost:3002"
+    // return process.env.NEXT_PUBLIC_AUTH_SERVER_ENDPOINT || 'http://localhost:3002';
+}
+
+export const fetchServerEndpointChat = () => {
+    console.log(process.env.NODE_ENV);
+    return process.env.NODE_ENV === 'production'?
+        "http://localhost"
+        :
+        "http://localhost:3003"
+}
+
+export const fetchUser = async (
+    url: string
+) => {
+    const response = await fetch(url);
+    const result = await response.json();
+    return result?.user
+}
+
+export const getAccessToken = async () => {
+    try {
+        const response = await fetch(`${fetchServerEndpointAuth()}/api/auth/token`, {
+            method: 'GET',
+            credentials: 'include' // Important to send the refresh token cookie
+        })
+        
+        if (!response.ok) {
+            throw new Error('Failed to get access token')
+        }
+        
+        const result = await response.json()
+        if (!result.success) {
+            throw new Error(result.message || 'Failed to get access token')
+        }
+        console.log(`Access token : ${result.data.accessToken}`);
+        
+        return result.data.accessToken
+    } catch (error) {
+        console.error('Error getting access token:', error)
+        return null
+    }
+}
+
+export const refreshAccessToken = async () => {
+    try{
+        const response = await fetch(`${fetchServerEndpointAuth()}/api/auth/refresh`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        const result = await response.json()
+        if(!result.success)
+        {
+            return {success : false, message : result.message}   
+        }
+        return {success : true, accessToken : result.accessToken}
+    }
+    catch(err)
+    {
+        console.log(`Error while refreshing access token : ${err}`);
+        return null
+    }
+}
+
 export const APIFetchRequestWithToken = async (
     url: string,
     token: string,
     method = 'GET' as string,
     data: any
 ) => {
-    // console.log(token, content, data);
-
-    const decoded = jwtDecode(token)
-    const now = Date.now() / 1000
-
-    let result
-    if (decoded?.exp as number < now) {
-        const reqToken = await fetch(`${fetchServerEndpointAuth()}/api/auth/refresh`)
-        result = await reqToken.json()
-        token = result.data.accessToken
-
-        console.log(token);
-
-        removeFromLocalStorage("AccessToken")
-        storeInLocalStorage('AccessToken', token)
-    }
-
-
-    const headerOptions = {
+    console.log(url);
+    
+    let headerOptions: { method: string; headers: { Authorization: string; 'Content-Type'?: string }; body?: string } = {
         method: method,
         headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+            Authorization: `Bearer ${token}`
+        }
+    };
+
+    if(method != 'GET'){
+        headerOptions.headers['Content-Type'] = 'application/json';
+        headerOptions.body = JSON.stringify(data);
     }
-
-    console.log(headerOptions);
-
-    return await fetch(url, headerOptions)
-}
-
-
-const parseToken = (token: string) => {
-    try {
-        const base64payload = token.split('.')[1]
-        const payload = atob(base64payload)
-        return JSON.parse(payload)
-    } catch (e) {
-        console.log(e);
-        return null
+    let result = await fetch(url, headerOptions)
+    let response = await result.json()
+    
+    console.log(`Response from api request : ${response.status} ${response.message}`);
+    
+    // If we get a 401, try to refresh the tokelo
+    if (response.status === 401 || response.status === 403) {
+        console.log('Token expired, attempting to refresh...')
+        // Get new access token
+        const newToken = await refreshAccessToken()
+        
+        if (newToken) {
+            console.log('Got new token, retrying request...')
+            // Retry the original request with new token
+            headerOptions.headers.Authorization = `Bearer ${newToken}`
+            const newResult = await fetch(url, headerOptions)
+            response = await newResult.json()
+            
+            // If the retry was successful, return the new token
+            if (response.success) {
+                return { response, newToken : newToken.accessToken }
+            }
+        }
     }
-}
-
-const isTokenExpired = (token: string) => {
-
-    console.log("Checking if token is expired");
-    console.log(token);
-    const decoded = parseToken(token)
-    console.log(decoded);
-    
-    if (!decoded) return true
-    const now = Math.floor(Date.now() / 1000)
-    console.log(decoded.exp, now);
-    
-    return decoded.exp < now
-}
-
-const refreshAccessToken = async () => {
-
-    console.log("Geneating new token");
-    
-    try {
-        const reqToken = await fetch(`${fetchServerEndpointAuth()}/api/auth/refresh`)
-        const result = await reqToken.json()
-        const token = result.data.accessToken
-
-        console.log(`New Token : ${token}`);
-
-        removeFromLocalStorage("AccessToken")
-        storeInLocalStorage('AccessToken', token)
-        return token
-    }
-    catch (e) {
-        console.log(e);
-        return null
+    else
+    {
+        return { response, newToken: token }
     }
 }
 
@@ -92,26 +136,31 @@ export const APIFetchRequestWithTokenFormData = async (
     method = 'GET' as string,
     data: any
 ) => {
-
-    let accessToken = fetchFromLocalStorage('AccessToken')
-
-    if (!accessToken || isTokenExpired(accessToken)) {
-        console.log(`Token has expired, Refreshing the token`);
-        
-        accessToken = await refreshAccessToken()
-    }
-
     const headerOptions = {
         method: method,
         headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
         },
         body: data
     }
 
-    console.log(headerOptions);
+    let response = await fetch(url, headerOptions)
+    
+    // If we get a 401, try to refresh the token
+    if (response.status === 401) {
+        // Get new access token
+        const newTokenResult = await refreshAccessToken()
+        const newToken = newTokenResult?.accessToken
+        console.log(`New token : ${newToken}`);
+        
+        if (newToken) {
+            // Retry the original request with new token
+            headerOptions.headers.Authorization = `Bearer ${newToken}`
+            response = await fetch(url, headerOptions)
+        }
+    }
 
-    return await fetch(url, headerOptions)
+    return response
 }
 
 export const APIFetchRequest = async (
@@ -131,36 +180,7 @@ export const APIFetchRequest = async (
             body: JSON.stringify(data)
         }
     }
-    console.log(headerOptions);
-
     const response = await fetch(url, headerOptions)
-
-    console.log("Request sent to service");
-
     const result = await response.json()
-    console.log(`Response from service : ${response}`);
-    
-    console.log(`Result after api request : ${result}`);
-    
     return result
-}
-
-export const fetchServerEndpointAuth = () => {
-    console.log(process.env.NODE_ENV);
-    
-    return process.env.NODE_ENV === 'production'?
-        "http://localhost"
-        :
-        "http://localhost:3001"
-    // return process.env.NEXT_PUBLIC_AUTH_SERVER_ENDPOINT || 'http://localhost';
-    // return `http://localhost`
-}
-
-export const fetchServerEndpointRecipe = () => {
-    console.log(process.env.NODE_ENV);
-    return process.env.NODE_ENV === 'production'?
-        "http://localhost"
-        :
-        "http://localhost:3002"
-    // return process.env.NEXT_PUBLIC_AUTH_SERVER_ENDPOINT || 'http://localhost:3002';
 }

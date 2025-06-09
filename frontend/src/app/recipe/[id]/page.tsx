@@ -15,11 +15,23 @@ import '@/styles/view/review.css'
 import '@/styles/view/recipe.css'
 import { fetchFromLocalStorage } from '@/utils/LocalStorage';
 import { useRouter } from 'next/navigation';
+
+interface Review {
+  user: {
+    _id: string;
+    email: string;
+  };
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
 const recipe = () => {
 
   const { id } = useParams()
 
   const [token, setToken] = useState("")
+  const [currentUser, setCurrentUser] = useState({})
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -66,26 +78,39 @@ const recipe = () => {
     video: ""
   })
 
-  const [reviews, setReviews] = useState([{
-    user: "",
+  const [reviews, setReviews] = useState<Review[]>([{
+    user: { _id: '', email: '' },
     rating: 0,
     comment: "",
-    date: ""
+    createdAt: ""
   }])
 
   const [newReview, setNewReview] = useState({
-    user: "",
+    user: currentUser,
     rating: 0,
     comment: "",
-    date: ""
+    createdAt: ""
   })
 
   const [addClick, setAddClick] = useState(false)
 
   useEffect(() => {
-    setToken(fetchFromLocalStorage("AccessToken") as string)
+    fetchAccessToken()
     fetchRecipeData()
   }, [])
+
+  const fetchAccessToken = async () => {
+    const result = await APIFetchRequest(
+      `${fetchServerEndpointRecipe()}/api/auth/token`,
+    )
+
+    if(result.success) {
+      setToken(result.data.accessToken)
+      setCurrentUser(result.data.data)
+    } else {
+      throw new Error("Failed to fetch access token")
+    }
+  }
 
   const fetchRecipeData = async () => {
     console.log(`Recipe Id : ${id}`);
@@ -98,6 +123,7 @@ const recipe = () => {
 
     console.log(`Result : ${result.data}, Success: ${result.success}`);
     console.log(result.data.general);
+    console.log(result.data.reviews);
     
     if (result.success) {
       setRecipe(result.data.general)
@@ -126,33 +152,66 @@ const recipe = () => {
     })
   }
   const handleAddReviewSubmit = async () => {
-    // Logic to submit the review
-
-    const sendBackend = await APIFetchRequestWithToken(
-      `${fetchServerEndpointRecipe()}/api/recipe/view/${id}`,
-      token,
-      'POST',
-      newReview
-    )
-
-    if (sendBackend.ok) {
-      setReviews([
-        ...reviews,
-        {
-          user: newReview.user,
-          rating: newReview.rating,
-          comment: newReview.comment,
-          date: new Date().toLocaleDateString()
+    try {
+        // Validate review data
+        if (!newReview.rating || !newReview.comment) {
+            alert("Please provide both rating and comment")
+            return
         }
-      ])
-      setNewReview({
-        user: "",
-        rating: 0,
-        comment: "",
-        date: ""
-      })
-      setAddClick(false)
-      router.push('/')
+
+        // Prepare review data
+        const reviewData = {
+            recipeId: id,
+            rating: Number(newReview.rating),
+            comment: newReview.comment,
+            userId: currentUser
+        }
+
+        // Send review to backend
+        const result = await APIFetchRequestWithToken(
+            `${fetchServerEndpointRecipe()}/api/recipe/add-review/${id}`,
+            token,
+            'POST',
+            reviewData
+        )
+
+        if (!result) {
+            throw new Error('Failed to submit review')
+        }
+
+        const { response, newToken } = result
+        console.log(`Response after api req: ${response}`);
+        
+        if (newToken) {
+            setToken(newToken as unknown as string)
+        }
+
+        if (!response.success) {
+            console.log(`Error while converting response to json : ${response.message}`);
+            
+            throw new Error(response.message || 'Failed to submit review')
+        }
+        else
+        {
+          setReviews(prevReviews => [...prevReviews, response.data])
+            
+            // Reset form
+            setNewReview({
+                user: currentUser,
+                rating: 0,
+                comment: "",
+                createdAt: ""
+            })
+            setAddClick(false)
+            
+            // Show success message
+            alert("Review submitted successfully!")
+            window.location.reload()
+        }
+      
+    } catch (error: any) {
+        console.error('Error submitting review:', error?.message)
+        alert(error?.message || 'Failed to submit review. Please try again.')
     }
   }
 
@@ -252,27 +311,27 @@ const recipe = () => {
               :
               <></>
           }
-          {reviews.length > 1 ? reviews.map((review, index) => (
+          {reviews.length > 0 && reviews[0].comment !== "" ? reviews.map((review, index) => (
             <div className="review-card" key={index}>
-              <div className="review-card-header">
-                <div className="review-card-header-user">
-                  {review.user}
+                <div className="review-card-header">
+                    <div className="review-card-header-user">
+                        {review.user?.email || 'Anonymous User'}
+                    </div>
+                    <div className="review-card-header-rating">
+                        Rating: {review.rating} / 5
+                    </div>
                 </div>
-                <div className="review-card-header-rating">
-                  Rating : {review.rating} / 5
+                <div className="review-card-body">
+                    {review.comment}
                 </div>
-              </div>
-              <div className="review-card-body">
-                Comment : {review.comment}
-              </div>
-              <div className="review-card-footer">
-                Date : {review.date}
-              </div>
+                <div className="review-card-footer">
+                    Posted on: {new Date(review.createdAt).toLocaleDateString()}
+                </div>
             </div>
           ))
             :
             <div className="no-reviews">
-              No reviews yet. Be the first to review!
+                No reviews yet. Be the first to review!
             </div>
           }
         </div>

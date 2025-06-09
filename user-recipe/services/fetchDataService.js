@@ -6,6 +6,7 @@ export const fetchRecipeResponse = async ()=>{
     await consumer.connect()
     await consumer.subscribe({ topic: "recipe-response", fromBeginning: false })
     await consumer.subscribe({ topic: "recipe-idvl-response", fromBeginning: false })
+    await consumer.subscribe({ topic: "recipe-review-response", fromBeginning: false })
     // const pendingResponses = new Map()
 
     consumer.run({
@@ -39,6 +40,8 @@ export const fetchRecipeResponse = async ()=>{
                     redisKey = `recipe:${data.id}`
                     await redisClient.setEx(redisKey, 600, JSON.stringify(data))
                     break;
+                case "recipe-review-response":
+                    break;
                 default:
                     console.log("Invalid topic");
             }
@@ -46,6 +49,7 @@ export const fetchRecipeResponse = async ()=>{
             
             if (res) {
                 res.status(status).json({
+                    status: status,
                     success: success,
                     message: log,
                     data: data

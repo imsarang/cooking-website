@@ -1,0 +1,18 @@
+.chats-main{
+    width: 30%;
+    height: 100%;
+    border-right: 1px solid #e0e0e0;
+}
+
+.chat{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 20px;
+}
+
+.chat-image{
+    font-size: 20px;
+}

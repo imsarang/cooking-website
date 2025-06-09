@@ -1,13 +1,75 @@
 .chat-header{
     width:100%;
     display:flex;
-    /* background-color: red; */
-    /* justify-content: space-around; */
+    justify-content: space-between;
     align-items: center;
     border: 2px solid orange;
+    padding: 0 1%;
 }
 
 .chat-search{
-    width:60%;
-    /* padding: 2%; */
+    width: 27%;
+}
+
+.chat-others{
+    /* font-size: 1rem; */
+    cursor: pointer;
+}
+
+/* Others Dropdown */
+.chat-header-others-content{
+    position: absolute;
+    z-index: 99;
+    top: 20%;
+    left: 80%;
+    width: 15%;
+    /* width: 100%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 2% 1%;
+}
+
+.chat-header-others-content-item{
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    width: 100%;
+    font-size: 15px;
+}
+
+.chat-header-icon{
+    padding: 0 7% 0 0;
+}
+
+/* Users dropdown */
+.show-users{
+    position: absolute;
+    z-index: 99;
+    top: 18%;
+    left: 10%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgb(171, 168, 168);
+    border-radius: 10px;
+}
+
+.show-users-user{
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+    padding: 2% 2%;
+    /* border-bottom: 1px solid white; */
+}
+
+.show-users-user:hover{
+    background-color: rgb(171, 168, 168);
+    transition: 0.3s;
+    transform: scale(1.02);
+    border-radius: 10px;
 }

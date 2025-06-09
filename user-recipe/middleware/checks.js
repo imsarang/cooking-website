@@ -1,34 +1,50 @@
 import multer from 'multer'
 import jwt from 'jsonwebtoken'
+import redisClient from '../connectRedis.js'
 
-export const checkAuth = (
-    req,
-    res,
-    next
-)=>{
+export const checkAuth = async (req, res, next) => {
     const authHeader = req.headers['authorization']
-    const token = authHeader.split(' ')[1]
-    console.log(token);
+    const token = authHeader?.split(' ')[1]
+    console.log("Received token:", token);
     
     if (!token) {
-        return res.status(401).json({ success: false, message: 'Unauthorized' })
+        return res.status(401).json({ success: false, message: 'Unauthorized - No token provided' })
     }
-    // Verify the token here (e.g., using JWT or any other method)
-    // If the token is valid, call next()
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
-        req.user = decoded
-        console.log(req.user);
-        
-        next()
-    }catch(err){
-        console.log(err);
-        
-        return res.status(403).json({ success : false, message:"Invalied Token" })
-    }
-    // If the token is invalid, return an error response
 
-} 
+    try {
+        // First verify the JWT
+        console.log(`Access secret : ${process.env.JWT_ACCESS_SECRET}`);
+        
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+        console.log("Decoded token:", decoded);
+
+        // Then check Redis
+        const redisKey = `user:${decoded.id}`
+        const cachedData = await redisClient.get(redisKey)
+        
+        if (!cachedData) {
+            return res.status(401).json({ success: false, message: 'Token not found in cache' })
+        }
+
+        const { accessToken } = JSON.parse(cachedData)
+        
+        // Verify the token matches what's in Redis
+        if (accessToken !== token) {
+            return res.status(401).json({ success: false, message: 'Invalid token' })
+        }
+
+        req.user = decoded
+        next()
+    } catch(err) {
+        console.log("Token verification error:", err);
+        
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ success: false, message: 'Token has expired', status : 401 })
+        }
+        
+        return res.status(403).json({ success: false, message: 'Invalid token' , status : 403 })
+    }
+}
 
 export const checkImage = (
     req,

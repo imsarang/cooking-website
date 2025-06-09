@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk'
 import Recipe from '../models/RecipeSchema.js'
+import axios from 'axios'
 
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -16,80 +17,50 @@ const s3 = new AWS.S3({
 export const createRecipe = async (recipeData) => {
     console.log(recipeData);
 
-    console.log(`AWS ACCESS KEY : ${process.env.AWS_ACCESS_KEY_ID}`);
-
-
-    s3.listBuckets((err, data) => {
-        if (err) {
-            console.error("S3 auth failed:", err);
-        } else {
-            console.log("S3 is authenticated ✅ - Buckets:", data.Buckets);
-        }
-    });
-
-    // console.log(req.body);
-
     // recipe
     const { recipe, ingredients, steps, nutrition } = recipeData.message.jsonData
-
     const { title, description, prepTime, cookTime, totalTime, servings, cuisine, category, difficulty, author } = JSON.parse(recipe)
 
-    // image
-    const imageFile = recipeData.message.filesData['imageFile'][0]
-    const imageName = title.lower().replace(/ /g, "-")
-    const imageFileKey = `image/${imageName}`
-
-    console.log(imageFile);
-
-    console.log(`Image file key : ${imageFileKey}`);
-    console.log(`Image buffer type : ${typeof (imageFile.buffer)}`);
-
-
-    const ImageParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: imageFileKey,
-        Body: Buffer.from(imageFile.buffer.data),
-        ContentType: imageFile.mimetype,
-    }
-
-    console.log(`Image Params : ${ImageParams}`);
-
-    // video
-    const videoFile = recipeData.message.filesData['videoFile'][0]
-    const videoFileKey = `video/${Date.now()}-${videoFile.originalname}`
-    console.log(videoFile);
-
-    const VideoParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: videoFileKey,
-        Body: Buffer.from(videoFile.buffer.data),
-        ContentType: videoFile.mimetype
-    }
-
     try {
-        const ImageData = await s3.upload(ImageParams).promise();
-        const VideoData = await s3.upload(VideoParams).promise();
+        // Upload image using Lambda
+        const imageFile = recipeData.message.filesData['imageFile'][0]
+        const imageBase64 = Buffer.from(imageFile.buffer.data).toString('base64')
+        const imageResponse = await axios.post(process.env.LAMBDA_API_URL, {
+            file: `data:${imageFile.mimetype};base64,${imageBase64}`,
+            fileName: `${title.toLowerCase().replace(/ /g, "-")}.${imageFile.mimetype.split('/')[1]}`,
+            fileType: imageFile.mimetype,
+            folder: 'image'
+        })
 
-        if (ImageData && VideoData) {
-            const recipe = await Recipe.create(
-                {
-                    title, description, prepTime, cookTime, totalTime, servings, cuisine, category, difficulty, author,
-                    ingredients: JSON.parse(ingredients),
-                    steps: JSON.parse(steps),
-                    image: ImageData.Location,
-                    video: VideoData.Location,
-                    nutrition: JSON.parse(nutrition),
-                }
-            )
-        }
+        // Upload video using Lambda
+        const videoFile = recipeData.message.filesData['videoFile'][0]
+        const videoBase64 = Buffer.from(videoFile.buffer.data).toString('base64')
+        const videoResponse = await axios.post(process.env.LAMBDA_API_URL, {
+            file: `data:${videoFile.mimetype};base64,${videoBase64}`,
+            fileName: `${Date.now()}-${videoFile.originalname}`,
+            fileType: videoFile.mimetype,
+            folder: 'video'
+        })
 
-        console.log(`Recipe Created!!!!`);
+        if (imageResponse.data.success && videoResponse.data.success) {
+            const recipe = await Recipe.create({
+                title, description, prepTime, cookTime, totalTime, servings, cuisine, category, difficulty, author,
+                ingredients: JSON.parse(ingredients),
+                steps: JSON.parse(steps),
+                image: imageResponse.data.url,
+                video: videoResponse.data.url,
+                nutrition: JSON.parse(nutrition),
+            })
 
-        // APIResponseSuccess(res, "Recipe Added to DB", 200, recipe)
-        return {
-            status: 200,
-            success: true,
-            message: "Recipe Added to Database"
+            console.log(`Recipe Created!!!!`);
+
+            return {
+                status: 200,
+                success: true,
+                message: "Recipe Added to Database"
+            }
+        } else {
+            throw new Error("Failed to upload media files")
         }
     }
     catch (err) {
@@ -97,7 +68,7 @@ export const createRecipe = async (recipeData) => {
         return {
             status: 500,
             success: false,
-            message: "Internal Server Error , failed to store recipe in DB"
+            message: "Internal Server Error, failed to store recipe in DB"
         }
     }
 }
@@ -142,6 +113,29 @@ export const getRecipeById = async (recipeData) => {
                     reviews: jsonData.reviews,
                 }
             }
+    }
+    catch (err) {
+        console.log(err);
+        return {
+            status: 500,
+            success: false,
+            message: "Internal server error"
+        }
+    }
+}
+
+export const createRecipeReview = async (reviewData) => {
+    console.log(`Review data : ${reviewData}`);
+    const { recipeId, comment, rating, author } = reviewData.message.jsonData
+    try {
+        const recipe = await Recipe.findByIdAndUpdate(recipeId, { $push: { reviews: { comment, rating, author } } })
+        if (recipe) {
+            return {
+                status: 200,
+                success: true,
+                message: "Review added successfully"
+            }
+        }
     }
     catch (err) {
         console.log(err);

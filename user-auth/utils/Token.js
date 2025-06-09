@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { APIResponseError, APIResponseFailure, APIResponseSuccess } from './APIresponse.js'
 import User from '../models/UserSchema.js'
+import redisClient from '../connectRedis.js'
 
 export const generateRefreshToken = (user) => {
     return jwt.sign(
@@ -11,11 +12,6 @@ export const generateRefreshToken = (user) => {
 }
 
 export const generateAccessToken = (user) => {
-
-    console.log(`Access token for user : ${user._id}`);
-    console.log(process.env.JWT_ACCESS_SECRET);
-    
-    
     return jwt.sign(
         { id: user?._id },
         process.env.JWT_ACCESS_SECRET,
@@ -23,68 +19,90 @@ export const generateAccessToken = (user) => {
     )
 }
 
-export const refreshAccessToken = async (
-    req,
-    res
-) => {
+export const refreshAccessToken = async (req, res) => {
     const { refreshToken } = req.cookies
-    console.log(refreshToken);
     
     if (!refreshToken) {
-        APIResponseError(res, "Refresh Token not found", 500)
+        return APIResponseError(res, "Refresh Token not found", 401)
     }
 
     try {
-        const decoded = jwt.verify(refreshToken,process.env.JWT_REFRESH_SECRET)
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
         const user = await User.findById(decoded.id)
         
-        if(!user)
-        {
-            APIResponseError(res,"User not found",400)
+        if(!user) {
+            return APIResponseError(res, "User not found", 401)
         }
         
+        // Generate new tokens
         const newAccessToken = generateAccessToken(user)
+        const newRefreshToken = generateRefreshToken(user)
 
-        const data = {
-            user:user,
-            accessToken:newAccessToken
+        // Set new refresh token in HTTP-only cookie
+        const expiry = 7 * 24 * 60 * 60 // 7 days
+        res.cookie('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            path: '/',
+            maxAge: expiry * 1000
+        })
+
+        // Store access token in Redis
+        const redisKey = `user:${user._id}`
+        const redisData = {
+            accessToken: newAccessToken,
+            user: user
         }
+        await redisClient.setEx(redisKey, expiry, JSON.stringify(redisData))
 
-        APIResponseSuccess(res,"Token generated",200,data)
+        // Return only the access token to the client
+        return APIResponseSuccess(res, "Token refreshed", 200, {
+            success : true,
+            accessToken: newAccessToken
+        })
 
     } catch (error) {
-        console.log(error);
-        
-        APIResponseError(res, error, 500)
+        console.log("Token refresh error:", error);
+        return APIResponseError(res, "Invalid refresh token", 401)
     }
 }
 
-export const authToken = (handler)=>{
-    return async (
-        req,
-        res
-    )=>{
+export const getAccessToken = async (req, res) => {
+    const { refreshToken } = req.cookies
+    
+    if (!refreshToken) {
+        return APIResponseError(res, "Refresh Token not found", 401)
+    }
+
+    try {
+        // Verify the refresh token
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
+        console.log(`decoded User : ${decoded}`);
         
-        console.log(req.headers['authorization']);
+        const user = await User.findById(decoded.id)
         
-        let token = req.headers['authorization']
-        token = token?.split(' ')[1]
-        
-        try{
-            const decoded = jwt.verify(token,process.env.JWT_ACCESS_SECRET)
-            req.user = await User.findById(decoded.id).select('-password')
-            if(!req.user)
-            {
-                APIResponseFailure(res,"User not logged in",401)
-            }
-            handler(req,res)
+        if (!user) {
+            return APIResponseError(res, "User not found", 401)
         }
-        catch(error){
-            if(error?.name == "TokenExpiredError")
-            {
-                APIResponseFailure(res,"Token has expired",401)
-            }
-            APIResponseError(res,error,500)
+
+        // Get access token from Redis
+        const redisKey = `user:${user._id}`
+        const cachedData = await redisClient.get(redisKey)
+        
+        if (!cachedData) {
+            return APIResponseError(res, "Token not found in cache", 401)
         }
+
+        const { accessToken, data } = JSON.parse(cachedData)
+        
+        return APIResponseSuccess(res, "Token retrieved", 200, {
+            accessToken,
+            data
+        })
+
+    } catch (error) {
+        console.log("Get token error:", error);
+        return APIResponseError(res, "Invalid refresh token", 401)
     }
 }

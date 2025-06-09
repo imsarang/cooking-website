@@ -1,6 +1,9 @@
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Layout from '@/app/layout'; // Adjust if needed
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/redux/store';
 import '../styles/globals.css';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -16,8 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
   // }
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </PersistGate>
+    </Provider>
   );
 }

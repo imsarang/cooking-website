@@ -4,9 +4,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Sidebar from "@/components/common/Sidebar";
 import Header from "@/components/common/Header"
 import { useState, useEffect } from "react"
-import { fetchFromLocalStorage, removeFromLocalStorage, storeInLocalStorage } from '@/utils/LocalStorage';
-
 import "./globals.css";
+import { APIFetchRequest, fetchServerEndpointAuth } from "@/middleware/common";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/redux/store';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,19 +34,37 @@ export default function Layout({
   const [token, setToken] = useState(null as string | null);
 
   useEffect(() => {
-    setToken(fetchFromLocalStorage('AccessToken') as string)
+    fetchAccessToken()
+    console.log(token);
+    
   }, [token])
+
+  const fetchAccessToken = async () => {
+    const result = await APIFetchRequest(
+      `${fetchServerEndpointAuth()}/api/auth/token`,
+    )
+
+    if(result.success)
+    {
+      console.log(result.data.accessToken);
+      setToken(result.data.accessToken)
+    }
+    else
+      throw new Error("Failed to fetch access token")
+  }
 
   return (
     <html lang="en">
       <body
         className={`project ${geistSans.variable} ${geistMono.variable} antialiased`}
       > 
-
-      <Header token={token} setToken={setToken} />
-      <Sidebar token={token} />
-      {children}
-
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Header token={token} setToken={setToken} />
+            <Sidebar token={token} />
+            {children}
+          </PersistGate>
+        </Provider>
       </body>
     </html>
   );

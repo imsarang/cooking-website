@@ -32,6 +32,8 @@ export const sendRecipeDataToKafka = async (req, res) => {
 }
 
 export const sendReviewDataToKafka = async (req, res) => {
+    console.log(`Review : ${req.body}`);
+    
     const message = {
         jsonData: req.body,
     }

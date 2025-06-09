@@ -4,15 +4,16 @@ import cors from "cors"
 import dotenv from "dotenv"
 import userRoutes from "./routes/userRoutes.js"
 import connectDB from './db/connectDB.js'
+import { fetchUserDataFromKafka } from "./services/fetchUserData.js"
+import redisClient from "./connectRedis.js"
 
 const app = express()
 
-if(process.env.NODE_ENV !== 'production') {
-    dotenv.config({path: '../.env.local'})
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config({ path: '../.env.local' })
     console.log("Development mode")
 }
-else
-{
+else {
     console.log("Production mode")
 }
 
@@ -24,19 +25,45 @@ app.use(express.json())
 //cookie
 app.use(cookieParser())
 
+if (process.env.NODE_ENV === 'production') {
+    await redisClient.connect();
+    redisClient.on('connect', () => {
+        console.log('Redis client connected');
+    });
+}
+
 //cors
 app.use(cors({
-    origin:process.env.FRONTEND_ENDPOINT || "http://localhost:3000",
-    methods:"GET,POST,PUT,DELETE",
-    credentials:true
+    origin: process.env.FRONTEND_ENDPOINT || "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true
 }))
 
 //connect to database
-const connect = await connectDB()
+connectDB()
 
 app.use('/api/auth', userRoutes)
 
 //open and listen to the port
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
+    if (process.env.NODE_ENV === 'production') {
+        fetchUserDataFromKafka()
+    }
+    // if (process.env.NODE_ENV === 'production') {
+    //     // async () => {
+    //     //     await Promise.all([
+    //     //         // dotenv.config({ path: "./.env" }),
+    //     //         fetchUserDataFromKafka()
+    //     //     ]);
+    //     // }
+    //     async () => {
+    //         try {
+    //             await fetchUserDataFromKafka()
+    //         }
+    //         catch (err) {
+    //             console.log(err);
+    //         }
+    //     }
+    // }
 })

@@ -50,5 +50,10 @@ export const sidebasrContentLoggedIn = [
         image: <FaPlus />,
         text: "Add Recipe",
         key: 3
+    },
+    {
+        image: <FaMessage />,
+        text: "Chat",
+        key: 4
     }
 ]

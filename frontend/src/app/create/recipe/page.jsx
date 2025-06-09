@@ -14,7 +14,7 @@ import Steps from '@/components/create/recipe/Steps'
 import Media from '@/components/create/recipe/Media'
 
 import { validateRecipe, validateIngredients } from '@/middleware/recipe'
-import { APIFetchRequestWithToken,APIFetchRequestWithTokenFormData, fetchServerEndpointRecipe } from '@/middleware/common'
+import { APIFetchRequest, APIFetchRequestWithToken,APIFetchRequestWithTokenFormData, fetchServerEndpointRecipe } from '@/middleware/common'
 import {fetchFromLocalStorage} from '@/utils/LocalStorage'
 import Nutrition from '@/components/create/recipe/Nutrition';
 
@@ -113,12 +113,24 @@ const recipe = () => {
   const [videoFile, setVideoFile] = useState('')
 
   useEffect(()=>{
-    setToken(fetchFromLocalStorage("AccessToken"))
+    fetchAccessToken()
     setRecipe(sampleRecipe)
     setIngredients(sampleIngredients)
     setSteps(sampleSteps)
     setNutrition(sampleNutrition)
+    console.log(token);
   },[])
+
+  const fetchAccessToken = async () => {
+    const result = await APIFetchRequest(
+      `${fetchServerEndpointRecipe()}/api/auth/token`,
+    )
+
+    if(result.success)
+      setToken(result.data.accessToken)
+    else
+      throw new Error("Failed to fetch access token")
+  }
 
   const handleCreateRecipe = (name, value) => {
     setRecipe({ ...recipe, [name]: value })

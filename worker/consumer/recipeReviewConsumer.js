@@ -1,7 +1,7 @@
-import { mongo } from "mongoose";
 import { producer, recipeReviewConsumer } from "../kafka/kafka.js";
-
+import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { createRecipeReview } from "../controller/recipeController.js";
 dotenv.config({ path: "./.env" });
 
 export const runReviewConsumer = async () => {
@@ -36,6 +36,7 @@ export const runReviewConsumer = async () => {
                                         status: result.status,
                                         success: result.success,
                                         log: result.message,
+                                        data: {}
                                     }),
                                 },
                             ],

@@ -9,6 +9,8 @@ import CustomBtn from './CustomBtn'
 import { emailValidation, passwordMatch, passwordValidation } from '@/middleware/auth'
 import { storeInLocalStorage } from '@/utils/LocalStorage'
 import {APIFetchRequest, fetchServerEndpointAuth} from '@/middleware/common'
+import { useDispatch } from 'react-redux'
+import { setUser, setIsLoggedIn } from '@/redux/slices/userSlice'
 
 const AuthImage = "/images/auth/AuthImage.jpg"
 const LoginText = "Login"
@@ -26,7 +28,11 @@ interface AuthProps {
 const MainSection = () => {
 
   const router = useRouter()
+  const dispatch = useDispatch()
+  
   // states
+  const [loading, setLoading] = useState<boolean>(false)
+
   const [toggle, setToggle] = useState<boolean>(true)
 
   const [loginData, setLoginData] = useState<AuthProps>({
@@ -68,8 +74,7 @@ const MainSection = () => {
 
   const handleSubmitLogin = async (e: any) => {
     e.preventDefault()
-
-    // console.log(loginData);
+    setLoading(true)
 
     if (!emailValidation(loginData.email)) {
       alert("Email is not in correct format")
@@ -88,9 +93,15 @@ const MainSection = () => {
 
     if (result.success) 
     {
-      storeInLocalStorage('AccessToken', result!.data?.accessToken)
+      // Store user data in Redux
+      console.log(`User Logged in : ${result.data} ${result.data.email}`);
+      
+      dispatch(setUser(result.data))
+      dispatch(setIsLoggedIn(true))
+      
       // Go to Home Page
       router.push('/')
+      setLoading(false)
     }
     else
     {
@@ -100,7 +111,7 @@ const MainSection = () => {
 
   const handleRegister = async (e: any) => {
     e.preventDefault()
-
+    setLoading(true)
     if (!emailValidation(registerData.email)) {
       alert("Email is not in correct format")
       return
@@ -117,19 +128,23 @@ const MainSection = () => {
     }
 
     // Send to backend
-    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/user`, 'POST', registerData)
+    const result = await APIFetchRequest(`${fetchServerEndpointAuth()}/api/auth/register`, 'POST', registerData)
 
     if (result?.success) 
     {
-      storeInLocalStorage('AccessToken', result!.data?.accessToken)
+      setLoading(false)
+      dispatch(setUser(result.user))
+      dispatch(setIsLoggedIn(true))
       router.push('/')
     }
     else
     {
       alert(`Unable to sign in : ${result?.message || result?.error}`)
     }
+      window.location.reload()
   }
-
+  
+  if(loading) return <div className="loading">Loading...</div>
   return (
     <div className='auth-main'>
       <div className={toggle ? 'auth container active' : 'auth container'}>
