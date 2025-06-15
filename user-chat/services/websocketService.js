@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { RedisMessageBucket } from './redisMessageBucket.js';
 import { v4 as uuidv4 } from 'uuid';
+import { fetchDataFromKafka, sendMessageToKafka, sendReqForChatMessages, sendReqForPrivateChat, sendReqForUserChats } from './kafkaService.js';
 
 const redisMessageBucket = new RedisMessageBucket();
 
@@ -140,212 +141,140 @@ const redisMessageBucket = new RedisMessageBucket();
 class WebSocketService {
     constructor() {
         this.io = null;
+        this.socket = null;
         this.userSockets = new Map();
         this.current_user = null;
+        this.chatRoom = null;
+        this.kafkaQueue = []
     }
 
     initialize(io) {
         this.io = io;
         console.log(`WebSocketService initialized with origin: ${process.env.MAIN_URL}`);
-        // send heartbeat every 30 seconds
-        setInterval(() => {
-            this.io.emit('heartbeat', { timestamp: Date.now() });
-        }, 30000);
 
         this.io.on('connection', (socket) => {
+            this.socket = socket;
             console.log('New client connected');
 
             // handle user auth and fetch all chats with user as member
             socket.on('authenticate', async (userId) => {
                 const result = await this.authenticateAndJoinChats(socket, userId);
-                if(result.success)
-                {
-                    this.current_user = result.userId
+                if(result.success) {
+                    this.current_user = userId;
+                    // Fetch chats after successful authentication
+                    await sendReqForUserChats(userId);
                 }
             });
 
-            // handle heartbeat ack
-            socket.on('heartbeat_ack', () => {
-                console.log('Heartbeat acknowledged');
-            });
-
-            // handle fetch chat
-            socket.on('fetch_chat', async ({ currentUser, receiver, chatType }) => {
-                try {
-                    console.log('Fetching chat between:', currentUser, 'and', receiver);
-                    // Get both users' chat lists
-                    // const currentUserChats = await redisMessageBucket.redis.smembers(`users:${currentUser._id}:chats`);
-                    // const receiverChats = await redisMessageBucket.redis.smembers(`users:${receiver._id}:chats`);
-
-                    console.log('Current user chats:', currentUserChats);
-                    console.log('Receiver chats:', receiverChats);
-
-                    // Find common chats between users
-                    const commonChats = currentUserChats.filter(chatId => receiverChats.includes(chatId));
-
-                    console.log('Common chats:', commonChats);
-
-                    // Check if any of the common chats matches the chat type
-                    for (const chatId of commonChats) {
-                        // const chatData = await redisMessageBucket.redis.hgetall(`chats:${chatId}`);
-                        // console.log('Checking chat:', chatId, 'Data:', chatData);
-                        // if (chatData && chatData.type === chatType) {
-                        //     // Found existing chat
-                        //     console.log('Found existing chat:', chatId);
-
-                        //     // fetch chat messages
-                        //     const result = await this.fetchChatMessages(chatId);
-                            
-                        //     console.log('Joining chat room:', `chats:${chatId}`);
-                        //     socket.join(`chats:${chatId}`);
-                            
-                        //     socket.emit('chat_found', {
-                        //         chat: {
-                        //             ...chatData,
-                        //             id: chatId
-                        //         },
-                        //         messages : result.messages
-                        //     });
-                        //     return;
-                        // }
-                    }
-
-                    // If no existing chat found, create a new one
-                    console.log('No existing chat found, creating new chat');
-                    const newChatId = uuidv4();
-                    const newChat = {
-                        id: newChatId,
-                        type: chatType,
-                        members: [currentUser._id, receiver._id],
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString()
-                    };
-
-                    // // Store new chat in Redis
-                    // await redisMessageBucket.storeNewChat(newChat);
-
-                    // // Add chat to both users' chat lists
-                    // await redisMessageBucket.redis.sadd(`user:${currentUser._id}:chats`, newChatId);
-                    // await redisMessageBucket.redis.sadd(`user:${receiver._id}:chats`, newChatId);
-
-                    // // Join the chat room
-                    // console.log('Joining new chat room:', `chats:${newChatId}`);
-                    // socket.join(`chats:${newChatId}`);
-
-                    // // Emit chat created event
-                    // socket.emit('chat_found', {
-                    //     chat : newChat,
-                    //     messages: []
-                    // });
-
-                } catch (error) {
-                    console.error('Error fetching/creating chat:', error);
-                    socket.emit('error', 'Failed to fetch/create chat');
-                }
-            });
-
-            // Handle joining a chat room
-            socket.on('join_chat', (chatId) => {
-                console.log(`Joining chat room: chats:${chatId}`);
-                socket.join(`chats:${chatId}`);
-            });
+            // join a chat room
+            socket.on('join room', async (chatRoom) => {
+                this.chatRoom = chatRoom
+                socket.join(this.chatRoom)
+            })
 
             // send message
-            socket.on('send_message', async ({chat, message}) => {
-                console.log(`Chat : ${chat.id}`);
-                console.log(`Message : ${message.id}`);
-                
-                await this.sendMessage(socket, chat, message);
-            })
-        });
-    }
-
-    async sendMessage(socket, chat, message) {
-        try {
-            // console.log('Sending message to redis : ', message.content);
-            // console.log('Chat : ', chat.id);
-            
-            // // Store message in Redis
-            // const storeStatus = await redisMessageBucket.storeMessage(message);
-            // console.log(`After storing in redis : ${storeStatus}`);
-
-            // // Broadcast to all users in the chat
-            // if (storeStatus.status == 200) {
-            //     message = { ...message, chatId: storeStatus.chatId }
-            //     console.log('Broadcasting message to room:', `chats:${storeStatus.chatId}`);
-            //     console.log('Message being broadcast:', message);
-
-            //     this.io.to(`chats:${storeStatus.chatId}`).emit('message_sent', {
-            //         status: 200,
-            //         message: "Message Sent",
-            //         data: message
-            //     });
-            //     console.log('Message broadcast complete');
-            // }
-        } catch (error) {
-            console.error('Error handling message:', error);
-            socket.emit('message_sent', {
-                status: 500,
-                message: 'Failed to send message'
+            socket.on('send_message', async (message) => {
+                console.log('Sending message:', message);
+                await this.sendMessage(socket, message);
             });
-        }
+        });
+
+        // store messages periodically in db
+        setInterval(async () => {
+            await this.processMessageQueue();
+        }, 30 * 1000); // 30 seconds
     }
 
     async authenticateAndJoinChats(socket, userId) {
         try {
+            console.log('=== authenticateAndJoinChats START ===');
+            console.log('Authenticating user:', userId);
+            
             this.userSockets.set(userId, socket.id);
-            // await redisMessageBucket.setUserOnlineStatus(userId, true);
-
-            // get user's active chats
-            // const userChats = await redisMessageBucket.redis.smembers(`user:${userId}:chats`);
-
-            // join all chat rooms
-            userChats.forEach(chatId => {
-                socket.join(`chats:${chatId}`);
+            this.current_user = userId;
+            
+            console.log('Socket mapping updated:', {
+                userId,
+                socketId: socket.id,
+                currentUser: this.current_user
             });
-
+            
+            // Create a mock request object for sendReqForUserChats
+            const mockReq = {
+                params: {
+                    userId: userId
+                }
+            };
+            
+            // Create a mock response object
+            const mockRes = {
+                json: (data) => {
+                    console.log('Sending chat list to socket:', data);
+                    socket.emit('chat_list', data);
+                }
+            };
+            
+            // Request user's chats through Kafka
+            console.log('Requesting chats through Kafka...');
+            await sendReqForUserChats(mockReq, mockRes);
+            
             // emit success
             socket.emit('authenticated', {
-                success:true,
-                userId,
-                chats: userChats
+                success: true,
+                userId
             });
-            console.log("Authenticated and joined chats for user: ", userId);
-
-            return {
-                success: true
-            }
-
+            
+            console.log("Authentication successful for user:", userId);
+            console.log('=== authenticateAndJoinChats END ===');
+            return { success: true };
         } catch (error) {
-            success:false,
             console.error('Authentication error:', error);
             socket.emit('error', 'Authentication failed');
+            return { success: false };
         }
     }
 
-    async fetchChatMessages(chatId) {
+    async sendMessage(socket, message) {
         try {
-            // const chatMessagesKey = `chats:${chatId}:messages`;
-            // const messageIds = await redisMessageBucket.redis.zrevrange(chatMessagesKey, 0, -1);
+            console.log('=== Sending Message START ===');
+            console.log('Received message to send:', message);
             
-            // const messages = await Promise.all(
-            //     messageIds.map(async (id) => {
-            //         const messageData = await redisMessageBucket.redis.hgetall(`messages:${id}`);
-            //         return messageData;
-            //     })
-            // );
+            // Ensure message has required fields
+            if (!message.chatId || !message.sender || !message.content) {
+                throw new Error('Missing required message fields');
+            }
+            
+            // Send to Kafka for processing
+            this.kafkaQueue.push({socket, message})
 
-            // return {
-            //     status: 200,
-            //     messages: messages.filter(msg => Object.keys(msg).length > 0)
-            // };
+            // Broadcast to all users in the chat room
+            const chatRoom = `chat:${message.chatId}`;
+            console.log('Broadcasting to chat room:', chatRoom);
+            this.io.to(chatRoom).emit('new_message', message);
+            
+            console.log('=== Sending Message END ===');
         } catch (error) {
-            console.error('Error fetching chat messages:', error);
-            return {
-                status: 500,
-                messages: [],
-                error: error.message
-            };
+            console.error('Error sending message:', error);
+            socket.emit('error', 'Failed to send message');
+        }
+    }
+
+    async processMessageQueue() {
+        if (this.kafkaQueue.length === 0) return;
+
+        console.log('Processing message queue...');
+        const messagesToProcess = [...this.kafkaQueue];
+        this.kafkaQueue = []; // Clear the queue
+
+        for (const { message } of messagesToProcess) {
+            try {
+                await sendMessageToKafka(message);
+                console.log('Message processed and sent to Kafka:', message._id);
+            } catch (error) {
+                console.error('Error processing message:', error);
+                // Put failed messages back in queue
+                this.kafkaQueue.push({ message });
+            }
         }
     }
 }

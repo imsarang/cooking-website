@@ -192,5 +192,3 @@ networks:
     name: cooking-web
     driver: bridge
   
-
-    

@@ -8,163 +8,229 @@ import Chats from '@/components/chat/Chats'
 import { useSelector } from 'react-redux'
 import { ChatInterface, MessageInterface, UserInterface } from '@/components/interfaces'
 import socketService from '@/services/socketService'
-import { APIFetchRequestWithToken, fetchServerEndpointAuth, fetchUser, getAccessToken } from '@/middleware/common'
+import { APIFetchRequestWithToken, fetchServerEndpointAuth, fetchServerEndpointChat, fetchUser, getAccessToken } from '@/middleware/common'
 
 const Chat = () => {
   const user = useSelector((state: any) => state.user?.user)
 
   const [chats, setChats] = useState<ChatInterface[]>([])
   const [currentChat, setCurrentChat] = useState<ChatInterface | null>(null)
-  const [messages, setMessages] = useState<MessageInterface[]>([])
+  const [chatMessages, setMessages] = useState<MessageInterface[]>([])
   const [message, setMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [typingUser, setTypingUser] = useState<string | null>(null)
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [searchUsers, setSearchUsers] = useState<UserInterface[]>([])
   const [searchUserQuery, setSearchUserQuery] = useState<string>("")
   const [token, setToken] = useState<string | null>(null)
   const [showUsers, setShowUsers] = useState<boolean>(false)
   const [selectedUser, setSelectedUser] = useState<UserInterface | null>(null)
-  const [currentChatMembers, setCurrentChatMembers] = useState<string[]>([])
+  const [currentChatMembers, setCurrentChatMembers] = useState<UserInterface[]>([])
   const [privateReciever, setPrivateReciever] = useState<UserInterface>()
 
-  useEffect(() => {
-    if (user?._id) {
-      // Initialize socket connection
-      console.log(`Current User : ${user} ${user.email}`);
-      
-      console.log("Initializing socket connection");
-      socketService.initialize(user._id);
-      console.log("Socket connection initialized");
-      
-      // Set up message handler
-      const unsubscribeMessage = socketService.onMessage((message) => {
-        console.log('Received message:', message);
-        setMessages(prev => [...prev, message]);
-        
-        // Update the chat in the chats list with the new message
-        setChats(prev => prev.map(chat => {
-          if (chat.id === message.chatId) {
-            return {
-              ...chat,
-              messages: [...(chat.messages || []), message]
-            };
-          }
-          return chat;
-        }));
-      });
-
-      // Set up typing handler
-      // const unsubscribeTyping = socketService.onTyping(({ userId, chatId, isTyping }) => {
-      //   if (chatId === currentChat?.id && userId !== user._id) {
-      //     setIsTyping(isTyping);
-      //   }
-      // });
-
-      // Set up chat list handler
-      const unsubscribeChatList = socketService.onChat((chat) => {
-        setChats(prev => {
-          const exists = prev.some(c => c.id === chat.id);
-          if (exists) {
-            return prev.map(c => c.id === chat.id ? { ...c, ...chat } : c);
-          }
-          return [...prev, chat];
-        });
-      });
-
-      // Set up current chat handler
-      const unsubscribeCurrentChat = socketService.onCurrentChat((chat, messages) => {
-        console.log('Current chat updated:', chat);
-        setCurrentChat(chat);
-        setMessages(messages);
-        setCurrentChatMembers(chat.members)
-      });
-
-      // Set up error handler
-      const unsubscribeError = socketService.onError((error) => {
-        console.error('Socket error:', error);
-      });
-
-      return () => {
-        unsubscribeMessage();
-        // unsubscribeTyping();
-        unsubscribeChatList();
-        unsubscribeCurrentChat();
-        unsubscribeError();
+  useEffect(()=>{
+    const initializeChat = async () => {
+        const newToken = await fetchAccessToken();
+        if (newToken) {
+            await fetchChatsFromDB(newToken);
+        }
+        socketService.initialize(user._id);
+    };
+    
+    initializeChat();
+    
+    return () => {
         socketService.disconnect();
-      };
+    };
+  },[user._id])
+
+  useEffect(()=>{
+    if (currentChat?._id) {
+      socketService.JoinRoom(currentChat._id).catch(error => {
+        console.error('Error joining chat room:', error);
+      });
     }
-  }, [user?._id]);
+  },[currentChat?._id])
 
   useEffect(() => {
-    if (currentChat) {
-      socketService.fetchChatMessages(currentChat.id);
+    const handleNewMessage = (message: MessageInterface) => {
+      console.log('Received new message:', message);
+      setMessages(prev => [...prev, message]);
+      setChats(prev => prev.map(chat => 
+        chat._id === message.chat 
+          ? { ...chat, lastMessage: message }
+          : chat
+      ));
+    };
+
+    // Subscribe to new messages
+    socketService.subscribeToMessage(handleNewMessage);
+
+    // Cleanup subscription on unmount
+    return () => {
+      socketService.subscribeToMessage(() => {});
+    };
+  }, []);
+
+  const fetchAccessToken = async()=>{
+    try{
+        console.log('=== Fetching Access Token ===');
+        const result = await getAccessToken();
+        if(!result) {
+            console.error('Could not get access Token');
+            return;
+        }
+        console.log('Got new token');
+        setToken(result);
+        return result; // Return the token
+    }catch(err) {
+        console.error('Error fetching access token:', err);
+        return null;
     }
-  }, [currentChat]);
+  }
+
+  const fetchChatsFromDB = async(tokenToUse: string) => {
+    try {
+        console.log('=== Fetching Chats From DB ===');
+        console.log('User ID:', user._id);
+        console.log('Token:', tokenToUse);
+        
+        if (!tokenToUse) {
+            console.error('No token available');
+            return;
+        }
+
+        const result = await APIFetchRequestWithToken(
+            `${fetchServerEndpointChat()}/api/chat/chats/${user._id}`,
+            tokenToUse,
+            'GET',
+            {}
+        );
+
+        if (!result) {
+            console.error('No result returned from API');
+            return;
+        }
+        
+        const {response, newToken} = result;
+        console.log('API Response:', response);
+        
+        if (!response.success) {
+            console.error('API request failed:', response.message);
+            return;
+        }
+        
+        setToken(newToken);
+        console.log('Setting chats:', response.chats);
+        setChats(response.chats);
+        
+        console.log('=== Fetch Chats Complete ===');
+    } catch (error) {
+        console.error('Error fetching chats:', error);
+    }
+  }
+
+  const fetchChatMessagesFromDB = async (chatID: string) => {
+    try {
+        console.log('=== Fetching Chat Messages ===');
+        console.log('Chat ID:', chatID);
+        console.log('Token:', token);
+
+        const result = await APIFetchRequestWithToken(
+            `${fetchServerEndpointChat()}/api/chat/messages/${chatID}`,
+            token as string,
+            'GET',
+            {}
+        );
+
+        if (!result) {
+            console.error('No result returned from API');
+            return;
+        }
+
+        const {response, newToken} = result;
+        console.log('API Response:', response);
+
+        if (!response.success) {
+            console.error('API request failed:', response.message);
+            return;
+        }
+
+        setToken(newToken);
+        console.log('Setting messages:', response.messages);
+        setMessages(response.messages || []);
+        
+        console.log('=== Fetch Messages Complete ===');
+    } catch (err) {
+        console.error('Error fetching messages:', err);
+    }
+  }
 
   const handleChatClick = async (id: string) => {
-    // const selectedChat = chats.find(chat => chat.id === id);
-    // if (selectedChat) {
-    //   setCurrentChat(selectedChat);
-    //   if(selectedChat.conversation == 'private')
-    //     selectedChat.members.forEach( async member=>{
-    //       if(member != user._id)
-    //       {
-    //         const receiverUser = await fetchUser(
-    //         `${fetchServerEndpointAuth()}/user/${member}`
-    //         )
-    //         setPrivateReciever(receiverUser)
-    //       }
-    //     })
-    //   setMessages([]); // Clear existing messages
-    //   socketService.fetchChatMessages(id);
-    // }
+    try {
+        console.log('=== Chat Selection START ===');
+        console.log('Fetching chat messages for chat ID:', id);
+        const selectedChat = chats.find(chat => chat._id === id);
+        console.log('Selected chat:', selectedChat);
+        
+        if (!selectedChat) {
+            console.error('No chat found with ID:', id);
+            return;
+        }
+
+        // Set current chat first
+        setCurrentChat(selectedChat);
+        
+        // If it's a private chat, find the other member
+        if (selectedChat.type === 'private' || selectedChat.conversation === 'private') {
+            const otherMember = selectedChat.members.find(member => member._id !== user._id);
+            console.log('Other member:', otherMember);
+            
+            if (otherMember) {
+                setPrivateReciever(otherMember);
+            }
+        }
+
+        // Clear existing messages before fetching new ones
+        setMessages([]);
+        await fetchChatMessagesFromDB(id);
+
+        console.log('=== Chat Selection END ===');
+    } catch (error) {
+        console.error('Error in handleChatClick:', error);
+    }
   };
 
   const handleSendMessage = async () => {
     console.log(`Sending message : ${message}`);
     console.log(`Current chat : ${currentChat}`);
     
-    // if (message.trim() === "" || !currentChat) return;
-    if (message.trim() === "") return;
-
-    const chat = {
-      id: currentChat? currentChat.id : 'New Chat',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      members: [user._id, selectedUser?._id],
-      name: 'Private Chat',
-      conversation: 'private' as const,
-      messages: [] as MessageInterface[]
-    }
+    if (message.trim() === "" || !currentChat || !currentChat._id) return;
 
     const newMessage: MessageInterface = {
-      id: Date.now().toString(),
+      _id: new Date().toISOString(),
       content: message,
       messageType: 'text',
       mediaUrl: '',
       status: 'pending',
-      chatId: currentChat? currentChat.id : 'New Chat',
+      chat: currentChat._id,
       sender: user._id,
       createdAt: new Date().toISOString()
     };
 
-    console.log(`Sending message : ${newMessage}`);
-    socketService.sendMessage(chat, newMessage);
-    setMessage('');
+    // Send message through socket first
+    console.log(`Sending message through socket:`, newMessage);
+    try {
+      await socketService.sendMessage(newMessage);
+      setMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   const handleTyping = () => {
     if (!currentChat) return;
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-
-    socketService.setTypingStatus(user._id, currentChat.id, true);
-
-    typingTimeoutRef.current = setTimeout(() => {
-      socketService.setTypingStatus(user._id, currentChat.id, false);
-    }, 2000);
+    // Typing status functionality removed as it's not implemented in socket service
   };
 
   const handleSearchUser = async (name: string, value: string) => {
@@ -204,22 +270,20 @@ const Chat = () => {
     setShowUsers(false);
     setSearchUserQuery('');
     setSelectedUser(selectedUser);
-    
-    const response = socketService.fetchPrivateChat({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      profilePicture: user.profilePicture
-    }, {
-      _id: selectedUser._id,
-      username: selectedUser.username,
-      email: selectedUser.email,
-      firstname: selectedUser.firstname,
-      lastname: selectedUser.lastname,
-      profilePicture: selectedUser.profilePicture
-    });
+    const result = await APIFetchRequestWithToken(
+      `${fetchServerEndpointChat()}/api/chat/private/${user._id}/${selectedUser._id}`,
+      token as string,
+      'GET',
+      {}
+    )
+
+    if(!result) return
+
+    const {response, newToken} = result
+
+    setToken(newToken)
+    setCurrentChat(response.chat)
+    setMessages(response.messages)
   };
 
   return (
@@ -238,21 +302,19 @@ const Chat = () => {
         <Chats
           chats={chats}
           handleChatClick={handleChatClick}
-          currentChatId={currentChat?.id}
-          selectedUser={selectedUser}
-          privateReciever = {privateReciever}
+          onUserSelect={handleUserSelect}
         />
         <div className="chat-main-content">
-              <ChatBody
-                messages={messages}
-                isTyping={isTyping}
-                currentUser={user}
-              />
-              <ChatInput
-                message={message}
-                setMessage={setMessage}
-                onSend={handleSendMessage}
-                onTyping={handleTyping}
+          <ChatBody
+            messages={chatMessages}
+            isTyping={isTyping}
+            currentUser={user}
+          />
+          <ChatInput
+            message={message}
+            setMessage={setMessage}
+            onSend={handleSendMessage}
+            onTyping={handleTyping}
           />
         </div>
       </div>

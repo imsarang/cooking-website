@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 import Message from "./MessageSchema.js";
 import User from "./UserSchema.js";
 
-const conversationSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
     chatName: {
         type: String,
         required: true,
     },
     chatType: {
+        type: String,
         enum: ["group", "private"],
         default: "private",
     },
@@ -26,26 +27,30 @@ const conversationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message",
     },
+}, {
+    timestamps: true
 })
 
-conversationSchema.pre("save", async function (next) {
+chatSchema.pre("save", async function (next) {
     try {
         if (this.chatType === "group") {
             if (this.members.length >= 3) {
-                this.chatName = this.chatName == " " ? this.members.map(member => member.username).join(",") : this.chatName;
+                this.chatName = this.chatName === " " ? this.members.map(member => member.username).join(",") : this.chatName;
                 next();
             }
             else {
                 console.log("Minimum members required for a group chat is 3");
             }
         }
-        else if(this.chatType === "private"){
-            if(this.members.length === 2){
-                this.chatName = this.members.map(member => member.username).join(",");
+        else if (this.chatType === "private") {
+            if (this.members.length === 2) {
+                if (!this.chatName || this.chatName === " ") {
+                    this.chatName = "Private Chat";
+                }
                 next();
-            }   
+            }
         }
-        else{
+        else {
             console.log("Invalid chat type");
         }
     }
@@ -55,6 +60,6 @@ conversationSchema.pre("save", async function (next) {
     }
 })
 
-const Conversation = mongoose.model("Conversation", conversationSchema);
+const Chat = mongoose.model("Chat", chatSchema);
 
-export default Conversation;
+export default Chat;

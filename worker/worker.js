@@ -3,6 +3,7 @@ import { runUserConsumer } from "./consumer/userConsumer.js";
 import { runRecipeConsumer }from "./consumer/useRecipeConsumer.js";
 import dotenv from 'dotenv'
 import { createKafkaTopics } from "./kafka/kafka.js";
+import { runChatConsumer } from "./consumer/chatConsumer.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -13,7 +14,8 @@ dotenv.config({ path: "./.env" });
         createKafkaTopics(),
         runUserConsumer(),
         runRecipeConsumer(),
-        runReviewConsumer()
+        runReviewConsumer(),
+        runChatConsumer()
     ]);
     // await runRecipeConsumer();
     // await fetchRecipeById

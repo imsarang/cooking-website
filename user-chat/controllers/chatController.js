@@ -177,3 +177,18 @@ export const createPrivateChat = async (req, res) => {
     }
 }
 
+// export const storeChatInDB = async (chat, message)=>{
+//     try{
+//         if(chat.id == 'New Chat')
+//         {
+//             // create a chat
+//             const chat = await Chat
+//         }
+//     }catch(err)
+//     {
+//         return {
+//             success: false,
+//             message: err.message
+//         }
+//     }
+// }

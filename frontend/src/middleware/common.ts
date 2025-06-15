@@ -81,52 +81,52 @@ export const refreshAccessToken = async () => {
     }
 }
 
+interface APIResponse {
+    response: any;
+    newToken: string;
+}
+
 export const APIFetchRequestWithToken = async (
     url: string,
     token: string,
-    method = 'GET' as string,
-    data: any
-) => {
-    console.log(url);
-    
-    let headerOptions: { method: string; headers: { Authorization: string; 'Content-Type'?: string }; body?: string } = {
-        method: method,
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    };
-
-    if(method != 'GET'){
-        headerOptions.headers['Content-Type'] = 'application/json';
-        headerOptions.body = JSON.stringify(data);
-    }
-    let result = await fetch(url, headerOptions)
-    let response = await result.json()
-    
-    console.log(`Response from api request : ${response.status} ${response.message}`);
-    
-    // If we get a 401, try to refresh the tokelo
-    if (response.status === 401 || response.status === 403) {
-        console.log('Token expired, attempting to refresh...')
-        // Get new access token
-        const newToken = await refreshAccessToken()
+    method: string,
+    body: any,
+    options: RequestInit = {}
+): Promise<APIResponse> => {
+    try {
+        console.log('Making API request to:', url);
+        console.log('Method:', method);
+        console.log('Token:', token ? 'Present' : 'Missing');
         
-        if (newToken) {
-            console.log('Got new token, retrying request...')
-            // Retry the original request with new token
-            headerOptions.headers.Authorization = `Bearer ${newToken}`
-            const newResult = await fetch(url, headerOptions)
-            response = await newResult.json()
-            
-            // If the retry was successful, return the new token
-            if (response.success) {
-                return { response, newToken : newToken.accessToken }
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: method !== 'GET' ? JSON.stringify(body) : undefined,
+            ...options
+        });
+
+        console.log('Response status:', response.status);
+        
+        if (response.status === 401 || response.status === 403) {
+            console.log('Token expired, attempting to refresh...');
+            const newToken = await getAccessToken();
+            if (newToken) {
+                console.log('Got new token, retrying request...');
+                return APIFetchRequestWithToken(url, newToken, method, body, options);
             }
         }
-    }
-    else
-    {
-        return { response, newToken: token }
+
+        const data = await response.json();
+        return {
+            response: data,
+            newToken: token
+        };
+    } catch (error) {
+        console.error('API request error:', error);
+        throw error;
     }
 }
 

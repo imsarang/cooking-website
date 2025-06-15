@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface UserInterface {
     _id: string,
     username: string,
@@ -8,26 +10,33 @@ export interface UserInterface {
 }
 
 export interface MessageInterface {
-    id: string,
+    _id: string,
     content: string,
     messageType: string,
     mediaUrl: string,
     status: string,
-    chatId?: string,
+    chat: string,
     sender: string,
-    createdAt: string
+    createdAt: string,
+    updatedAt?: string,
+    readBy?: Array<{
+        user: string,
+        readAt: Date
+    }>,
+    isDeleted?: boolean
 }
 
 export interface ChatInterface {
-    id: string;
-    name: string;
-    image?: string;
-    conversation: 'private' | 'group';
+    _id: string;
+    chatName: string;
+    chatType: string;
+    members: UserInterface[];
     messages: MessageInterface[];
-    members: string[];
-    createdAt: string;
-    loading?: boolean;
-    error?: string | null;
+    lastMessage?: MessageInterface;
+    conversation?: string;
+    type?: string;
+    image?: string;
+    id?: string;
 }
 
 export interface ResponseInterface {
@@ -52,9 +61,7 @@ export interface ChatHeaderInterface {
 export interface ChatsProps {
     chats: ChatInterface[];
     handleChatClick: (id: string) => void;
-    currentChatId?: string;
-    selectedUser: UserInterface | null
-    privateReciever: UserInterface | undefined
+    onUserSelect: (user: UserInterface) => void;
 }
 
 export interface ChatBodyProps {
@@ -65,7 +72,7 @@ export interface ChatBodyProps {
 
 export interface ChatInputProps {
     message: string;
-    setMessage: React.Dispatch<React.SetStateAction<string>>;
-    onSend: () => void;
-    onTyping: () => void;
+    setMessage: (message: string) => void;
+    handleSendMessage: () => Promise<void>;
+    handleTyping: () => void;
 }

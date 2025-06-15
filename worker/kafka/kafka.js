@@ -25,6 +25,11 @@ export const userConsumer = kafkaClient.consumer({
     maxRequestSize: 200000000
 })
 
+export const chatConsumer = kafkaClient.consumer({
+    groupId: 'chat-worker-group',
+    maxRequestSize: 200000000
+})
+
 const requiredTopics = [
     {
         topic: 'user-register',
@@ -75,6 +80,46 @@ const requiredTopics = [
         topic: "recipe-idvl-response",
         numPartitions: 2,
         replicationFactor: 1
+    },
+    {
+        topic: "send-message",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "fetch-chats-req",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "fetch-chat-msg-req",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "send-message-res",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "fetch-chats-res",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "fetch-chat-msg-res",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "private-chat-req",
+        numPartitions: 2,
+        replicationFactor: 1
+    },
+    {
+        topic: "private-chat-res",
+        numPartitions: 2,
+        replicationFactor: 1
     }
 ]
 
@@ -86,27 +131,24 @@ export const createKafkaTopics = async () => {
         console.log(`Kafka admin connected`);
 
         const existingTopics = await admin.listTopics();
+        console.log('Existing topics:', existingTopics);
+        
         const topicsToCreate = requiredTopics.filter(topic => !existingTopics.includes(topic.topic));
 
         if (topicsToCreate.length === 0) {
             console.log(`All topics already exist`);
-        }
-
-        else {
-
+        } else {
+            console.log('Creating topics:', topicsToCreate.map(t => t.topic));
             await admin.createTopics({
                 topics: topicsToCreate,
                 waitForLeaders: true,
             })
-
-            console.log(`Topics in kafka : ${existingTopics}`);
-
             console.log(`Topics created: ${topicsToCreate.map(topic => topic.topic).join(', ')}`);
         }
-
-    }
-    catch (err) {
-        console.log(err);
+    } catch (err) {
+        console.error('Error in createKafkaTopics:', err);
+    } finally {
+        await admin.disconnect();
     }
 }
 

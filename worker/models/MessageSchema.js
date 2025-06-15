@@ -39,24 +39,23 @@ const messageSchema = new mongoose.Schema({
     },
 
     // Reference to the user who should receive the message
-    receiver: {
+    chat: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Chat',
         required: true,
         validate: {
-            validator: async function(v) {
-                try {
-                    const User = mongoose.model('User');
-                    const user = await User.findById(v);
-                    return user !== null;
-                } catch (error) {
-                    return false;
+            validator: async function(v){
+                try{
+                    const Chat = mongoose.model('Chat')
+                    const chat = await Chat.findById(v)
+                    return chat !== null
+                }catch(err){
+                    console.log(err.message);
+                    return false
                 }
-            },
-            message: 'Receiver user does not exist'
+            }
         }
     },
-
     // The actual content of the message
     content: {
         type: String,

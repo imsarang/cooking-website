@@ -7,6 +7,7 @@ import cors from "cors";
 import http from "http";
 import dotenv from "dotenv"
 import { Server } from "socket.io";
+import { fetchDataFromKafka } from "./services/kafkaService.js";
 
 const app = express();
 app.use(express.json());
@@ -52,4 +53,7 @@ server.listen(process.env.CHAT_BACKEND_PORT_1, () => {
     console.log(process.env.MONGO_DB_URI);
     console.log(`Web socket has been initialized`);
     console.log(`Chat Server is running on port ${process.env.CHAT_BACKEND_PORT_1}`);
+    if(process.env.NODE_ENV === "production"){
+        fetchDataFromKafka()
+    }
 });

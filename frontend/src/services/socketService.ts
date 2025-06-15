@@ -1,175 +1,143 @@
 import { io, Socket } from 'socket.io-client';
-import { ChatInterface, MessageInterface, ResponseInterface, UserInterface } from '@/components/interfaces';
-import { fetchServerEndpointChat } from '@/middleware/common';
+import { ChatInterface, MessageInterface, UserInterface } from '@/components/interfaces';
 
 class SocketService {
     private socket: Socket | null = null;
-    private messageHandlers: ((message: MessageInterface) => void)[] = [];
-    private currentChatHandlers: ((chat: ChatInterface, messages: MessageInterface[]) => void)[] = [];
-    private typingHandlers: ((data: { userId: string; chatId: string; isTyping: boolean }) => void)[] = [];
-    private errorHandlers: ((error: string) => void)[] = [];
-    private fetchChatsHandler: ((chat: ChatInterface) => void)[] = [];
-    private sendStatusHandler: ((status: ResponseInterface) => void)[] = [];
+    private messageHandler: ((message: MessageInterface) => void) | null = null;
+    private currentChatHandler: ((chat: ChatInterface, messages: MessageInterface[]) => void) | null = null;
+    private isConnected: boolean = false;
+    private connectionPromise: Promise<void> | null = null;
 
     initialize(userId: string) {
-        console.log(`Initializing socket connection for user : ${userId} route : ${fetchServerEndpointChat()}`);
-
-        this.socket = io(fetchServerEndpointChat() || 'http://localhost:3003', {
-            autoConnect: true,
-            reconnection: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000
-        });
-
-        // Wait for connection before authenticating
-        this.socket.on('connect', () => {
-            console.log('Connected to chat server');
-            this.socket?.emit('authenticate', userId);
-        });
-
-        this.socket.on('heartbeat', () => {
-            console.log('Received heartbeat');
-            this.socket?.emit('heartbeat_ack');
-        });
-
-        this.socket.on('authenticated', (data: { userId: string; chats: ChatInterface[] }) => {
-            console.log('Authentication successful:', data);
-            data.chats.forEach(chat => {
-                console.log('Processing chat:', chat.id);
-                this.fetchChatsHandler.forEach(handler => handler(chat));
-            });
-        });
-
-        this.socket.on('chat_found', (data: {chat: ChatInterface, messages : MessageInterface[]})=>{
-            console.log('Chat found:', data);
-            this.currentChatHandlers.forEach(handler=>handler(data.chat, data.messages))
-        })
-
-        this.socket.on('message_sent', (response: ResponseInterface) => {
-            console.log('Received message_sent event:', response);
-            if (response.status == 200) {
-                console.log('Message sent successfully, data:', response.data);
-                this.messageHandlers.forEach(handler => handler(response.data));
-            } else {
-                console.error('Message send failed:', response.message);
-                this.errorHandlers.forEach(handler => handler(response.message));
-            }
-        });
-
-        this.socket.on('user_typing', (data: { userId: string; chatId: string; isTyping: boolean }) => {
-            this.typingHandlers.forEach(handler => handler(data));
-        });
-
-        this.socket.on('error', (error: string) => {
-            this.errorHandlers.forEach(handler => handler(error));
-        });
-
-        this.socket.on('chat_messages', (messages: MessageInterface[]) => {
-            messages.forEach(message => {
-                this.messageHandlers.forEach(handler => handler(message));
-            });
-        });
-    }
-    fetchPrivateChat(currentUser: UserInterface, reciever: UserInterface) {
-        console.log('Fetching private chat between:', currentUser._id, 'and', reciever);
-        if (this.socket?.connected) {
-            console.log('Socket is connected, emitting fetch_chat');
-            this.socket.emit('fetch_chat', {
-                currentUser: currentUser,
-                receiver: reciever,
-                chatType: 'private'
-            });
-        } else {
-            console.error('Socket not connected');
+        if (this.socket) {
+            console.log('Socket already initialized');
+            return;
         }
-    }
 
-    fetchGroupChat(currentUser: UserInterface, reciever: string) {
-        console.log('Fetching group chat:', reciever);
-        if (this.socket?.connected) {
-            console.log('Socket is connected, emitting fetch_chat');
-            this.socket.emit('fetch_chat', {
-                currentUser,
-                receiver: reciever,
-                chatType: 'group'
+        console.log('=== Socket Initialization START ===');
+        console.log('Initializing socket connection for user:', userId);
+        
+        this.connectionPromise = new Promise((resolve, reject) => {
+            this.socket = io('http://localhost:80', {
+                auth: {
+                    userId
+                },
+                reconnection: true,
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+                path: '/socket.io/'
             });
-        }
-        else {
-            console.error(`Socket not connected`);
-        }
-    }
 
-    fetchChatMessages(chatId: string) {
-        console.log('Fetching messages for chat:', chatId);
-        if (this.socket?.connected) {
-            console.log('Socket is connected, emitting fetch_chat_messages');
-            this.socket.emit('fetch_chat_messages', chatId);
-        } else {
-            console.error('Socket not connected');
-        }
-    }
+            this.socket.on('connect', () => {
+                console.log('Socket connected successfully');
+                this.isConnected = true;
+                // Emit authenticate event after connection
+                console.log('Emitting authenticate event with userId:', userId);
+                this.socket?.emit('authenticate', userId);
+                resolve();
+            });
 
-    sendMessage(chat: ChatInterface, message: MessageInterface) {
-        console.log('Sending message to chat server:', message);
-        console.log('Current chat:', chat);
+            this.socket.on('connect_error', (error) => {
+                console.error('Socket connection error:', error);
+                this.isConnected = false;
+                reject(error);
+            });
 
-        if (this.socket?.connected) {
-            console.log('Socket is connected, emitting send_message');
-            console.log(`Chat : ${chat.id}, message : ${message.content}`);
+            this.socket.on('disconnect', () => {
+                console.log('Socket disconnected');
+                this.isConnected = false;
+            });
+
+            this.socket.on('authenticated', (response) => {
+                console.log('Received authenticated response:', response);
+            });
             
-            this.socket.emit('send_message', {chat, message});
-        } else {
-            console.error('Socket not connected');
+            this.socket.on('new_message', (response)=>{
+                if(!this.messageHandler) {
+                    console.error('No registered message handlers');
+                    return;
+                }
+                if(!response) {
+                    console.error('New message not received with this signal');
+                    return;
+                }
+                this.messageHandler(response);
+            });
+        });
+        
+        console.log('=== Socket Initialization END ===');
+    }
+
+    async waitForConnection() {
+        if (!this.connectionPromise) {
+            throw new Error('Socket not initialized');
+        }
+        await this.connectionPromise;
+    }
+
+    async sendMessage(message: MessageInterface) {
+        try {
+            await this.waitForConnection();
+            
+            if (!this.socket || !this.isConnected) {
+                console.error('Socket not connected');
+                return;
+            }
+            
+            console.log('=== Sending Message ===');
+            console.log('Emitting send_message with:', message);
+            
+            // Ensure message has all required fields
+            const messageToSend = {
+                ...message,
+                chatId: message.chat, // Add chatId field for backend compatibility
+                sender: message.sender // Send sender ID for backend compatibility
+            };
+            
+            this.socket.emit('send_message', messageToSend);
+            console.log('=== Send Message Signal Sent ===');
+        } catch (error) {
+            console.error('Error sending message:', error);
         }
     }
 
-    setTypingStatus(userId: string, chatId: string, isTyping: boolean) {
-        if (this.socket?.connected) {
-            this.socket.emit('typing', { userId, chatId, isTyping });
+    async JoinRoom(chatID: string | undefined) {
+        try {
+            await this.waitForConnection();
+            
+            if (!this.socket || !this.isConnected) {
+                console.error('Socket not connected');
+                return;
+            }
+
+            if (!chatID) {
+                console.error('No chat ID provided');
+                return;
+            }
+
+            this.socket.emit('join room', `chat:${chatID}`);
+        } catch (error) {
+            console.error('Error joining room:', error);
         }
-    }
-
-    onMessage(handler: (message: MessageInterface) => void) {
-        this.messageHandlers.push(handler);
-        return () => {
-            this.messageHandlers = this.messageHandlers.filter(h => h !== handler);
-        };
-    }
-
-    onChat(handler: (chat: ChatInterface) => void) {
-        this.fetchChatsHandler.push(handler);
-        return () => {
-            this.fetchChatsHandler = this.fetchChatsHandler.filter(h => h !== handler);
-        };
-    }
-
-    onCurrentChat(handler: (chat: ChatInterface, messages: MessageInterface[]) => void) {
-        this.currentChatHandlers.push(handler);
-        return () => {
-            this.currentChatHandlers = this.currentChatHandlers.filter(h => h !== handler);
-        }
-    }
-
-    onTyping(handler: (data: { userId: string; chatId: string; isTyping: boolean }) => void) {
-        this.typingHandlers.push(handler);
-        return () => {
-            this.typingHandlers = this.typingHandlers.filter(h => h !== handler);
-        };
-    }
-
-    onError(handler: (error: string) => void) {
-        this.errorHandlers.push(handler);
-        return () => {
-            this.errorHandlers = this.errorHandlers.filter(h => h !== handler);
-        };
     }
 
     disconnect() {
         if (this.socket) {
             this.socket.disconnect();
             this.socket = null;
+            this.messageHandler = null;
+            this.currentChatHandler = null;
         }
+    }
+
+    subscribeToMessage(handler: (message: MessageInterface) => void) {
+        this.messageHandler = handler;
+    }
+
+    subscribeToCurrentChat(handler: (chat: ChatInterface, messages: MessageInterface[]) => void) {
+        this.currentChatHandler = handler;
     }
 }
 
-export default new SocketService(); 
+const socketService = new SocketService();
+export default socketService; 
